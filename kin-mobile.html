@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>KIN</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --terra: #C4622D;
+  --terra-l: #E8825A;
+  --terra-pale: #F5DDD3;
+  --charcoal: #1E1A17;
+  --dark-brown: #2D2420;
+  --med-brown: #6B5045;
+  --muted: #9A8478;
+  --sand: #D9CFC4;
+  --cream: #F5F0E8;
+  --warm-white: #FDFAF5;
+  --sage: #7A9E7E;
+  --indigo: #4A5899;
+  --gold: #C9933A;
+  --teal: #3D8E8E;
+  --plum: #6B4E71;
+  --border: rgba(30,26,23,0.10);
+  --border-med: rgba(30,26,23,0.18);
+  --r: 12px;
+  --r-sm: 8px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --tab-h: 82px;
+  --top-h: 108px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  background: #0a0a0a;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--charcoal);
+  overflow-x: hidden;
+}
+
+/* ── PHONE SHELL ── */
+.phone-shell {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  background: var(--warm-white);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── STATUS BAR ── */
+.status-bar {
+  background: var(--charcoal);
+  padding: 14px 24px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.status-time {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-icons svg { width: 16px; height: 16px; fill: var(--cream); }
+
+/* ── TOP BAR ── */
+.top-bar {
+  background: var(--charcoal);
+  padding: 8px 20px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--terra-l);
+  letter-spacing: -0.02em;
+}
+
+.logo span { color: var(--cream); }
+
+.top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+.notif-btn {
+  position: relative;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+.notif-btn svg { width: 18px; height: 18px; stroke: var(--cream); fill: none; }
+
+.notif-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--terra-l);
+  border: 2px solid var(--charcoal);
+}
+
+.avatar-top {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--terra);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: white;
+  cursor: pointer;
+  border: 2px solid var(--terra-l);
+}
+
+/* ── SCROLL CONTAINER ── */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--tab-h);
+}
+
+.scroll-area::-webkit-scrollbar { display: none; }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.25s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── BOTTOM TAB BAR ── */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--tab-h);
+  background: var(--charcoal);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 200;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tab-icon {
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.tab-icon svg { width: 22px; height: 22px; stroke: var(--muted); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+
+.tab-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.tab-btn.active .tab-icon svg { stroke: var(--terra-l); }
+.tab-btn.active .tab-label { color: var(--terra-l); }
+.tab-btn.active .tab-icon-filled { fill: var(--terra-l); stroke: var(--terra-l); }
+
+/* active indicator dot */
+.tab-btn.active::before {
+  content: '';
+  display: block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--terra-l);
+  position: absolute;
+  top: 6px;
+}
+
+/* ══════════════════════════
+   DISCOVER PAGE
+══════════════════════════ */
+.discover-hero {
+  background: var(--charcoal);
+  padding: 16px 20px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.discover-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: var(--terra);
+  opacity: 0.15;
+}
+
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terra-l);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--cream);
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-headline em { color: var(--terra-l); font-style: normal; }
+
+.mobile-search {
+  display: flex;
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.mobile-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 11px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--charcoal);
+  background: transparent;
+}
+
+.mobile-search button {
+  background: var(--terra);
+  border: none;
+  padding: 11px 16px;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* chip row */
+.chip-scroll {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chip-scroll::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px solid var(--border-med);
+  background: transparent;
+  color: var(--med-brown);
+  transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.chip.active, .chip:active { background: var(--terra); color: white; border-color: var(--terra); }
+
+/* section pad */
+.sec { padding: 16px 20px; }
+.sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.sec-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--charcoal); }
+.sec-link { font-size: 12px; color: var(--terra); font-weight: 500; background: none; border: none; cursor: pointer; }
+
+/* creator cards — horizontal scroll */
+.creator-scroll {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.creator-scroll::-webkit-scrollbar { display: none; }
+
+.creator-card-m {
+  flex-shrink: 0;
+  width: 150px;
+  background: white;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.cc-cover {
+  height: 90px;
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+.cc-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.92);
+  color: var(--charcoal);
+}
+
+.cc-body { padding: 8px 10px 12px; }
+
+.cc-avatar-wrap { margin-top: -18px; margin-bottom: 6px; }
+
+.cc-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 3px solid white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; color: white;
+}
+
+.cc-name { font-size: 13px; font-weight: 600; color: var(--charcoal); margin-bottom: 2px; }
+.cc-loc { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+
+.cc-connect {
+  width: 100%;
+  background: var(--terra-pale);
+  border: 1.5px solid var(--terra);
+  color: var(--terra);
+  padding: 5px;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cc-connect.requested { background: var(--terra); color: white; }
+
+/* featured row — full width cards */
+.featured-list { display: flex; flex-direction: column; gap: 10px; padding: 0 20px; }
+
+.featured-card {
+  background: white;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.fc-avatar {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px; color: white;
+}
+
+.fc-info { flex: 1; min-width: 0; }
+.fc-name { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+.fc-discipline { font-size: 11px; color: var(--terra); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+.fc-loc { font-size: 11px; color: var(--muted); }
+
+.fc-connect {
+  background: var(--terra-pale);
+  border: 1.5px solid var(--terra);
+  color: var(--terra);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.fc-connect.requested { background: var(--terra); color: white; }
+
+/* ══════════════════════════
+   COMMUNITY TIMELINE
+══════════════════════════ */
+.feed-tabs {
+  display: flex;
+  border-bottom: 1.5px solid var(--border);
+  background: white;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+.feed-tabs::-webkit-scrollbar { display: none; }
+
+.feed-tab {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 12px 14px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.18s;
+}
+
+.feed-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px; left: 0; right: 0;
+  height: 2px;
+  background: var(--terra);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+  border-radius: 2px;
+}
+
+.feed-tab.active { color: var(--charcoal); font-weight: 600; }
+.feed-tab.active::after { transform: scaleX(1); }
+
+/* compose strip */
+.compose-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.compose-avatar-s {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--terra);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: white;
+}
+
+.compose-input-fake {
+  flex: 1;
+  background: var(--cream);
+  border-radius: 50px;
+  padding: 9px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+}
+
+/* post cards */
+.post-list { display: flex; flex-direction: column; gap: 0; }
+
+.post-card-m {
+  background: white;
+  border-bottom: 8px solid var(--warm-white);
+}
+
+.post-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 10px;
+}
+
+.post-avatar-m {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; color: white;
+}
+
+.post-meta-m { flex: 1; }
+.post-author-m { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+.post-role-m { font-size: 11px; color: var(--muted); }
+.post-time-m { font-size: 11px; color: var(--muted); }
+
+.post-more {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.post-body-m {
+  padding: 0 20px 12px;
+  font-size: 14px;
+  color: var(--med-brown);
+  line-height: 1.65;
+}
+
+.post-body-m strong { color: var(--charcoal); font-weight: 600; }
+
+.post-media-m {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  margin-bottom: 4px;
+}
+
+.post-tags-m {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 20px 12px;
+}
+
+.post-tag-m { font-size: 12px; color: var(--terra); font-weight: 500; }
+
+.post-actions-m {
+  display: flex;
+  border-top: 1px solid var(--border);
+}
+
+.post-action-m {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+.post-action-m.liked { color: var(--terra); }
+
+/* milestone */
+.post-milestone-m {
+  margin: 0 20px 12px;
+  background: var(--charcoal);
+  border-radius: var(--r);
+  padding: 14px;
+}
+
+.milestone-label-m { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terra-l); margin-bottom: 6px; }
+.milestone-title-m { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: white; margin-bottom: 6px; line-height: 1.3; }
+.milestone-sub-m { font-size: 12px; color: var(--sand); line-height: 1.6; margin-bottom: 12px; }
+
+.milestone-author-m {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.ma-name { font-size: 12px; font-weight: 600; color: white; }
+.ma-sub { font-size: 11px; color: var(--sand); }
+
+/* ══════════════════════════
+   EVENTS PAGE
+══════════════════════════ */
+.event-featured-m {
+  margin: 16px 20px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, #1E1A17 40%, #4A2010);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 18px;
+  position: relative;
+}
+
+.efm-bg { position: absolute; inset: 0; font-size: 6rem; display: flex; align-items: center; justify-content: center; opacity: 0.15; z-index: 0; }
+
+.efm-content { position: relative; z-index: 1; }
+
+.efm-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 50px;
+  background: var(--terra);
+  color: white;
+  margin-bottom: 8px;
+}
+
+.efm-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.efm-meta {
+  font-size: 11px;
+  color: var(--sand);
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.efm-actions { display: flex; gap: 8px; }
+
+.btn-white-m {
+  background: white;
+  border: none;
+  color: var(--charcoal);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-ghost-m {
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* event list items */
+.event-list-m { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 20px; }
+
+.event-item-m {
+  background: white;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  display: flex;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.eim-date {
+  width: 58px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border-right: 1px solid var(--border);
+  padding: 10px 0;
+}
+
+.eim-month { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--terra); }
+.eim-day { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--charcoal); line-height: 1; }
+.eim-dow { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+.eim-info { flex: 1; padding: 10px 12px; min-width: 0; }
+
+.eim-type {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 50px;
+  margin-bottom: 4px;
+}
+
+.eim-title { font-size: 13px; font-weight: 600; color: var(--charcoal); margin-bottom: 3px; line-height: 1.3; }
+.eim-details { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+
+.eim-rsvp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 10px 12px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.rsvp-btn-m {
+  background: var(--terra);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s;
+}
+
+.rsvp-btn-m.going { background: var(--sage); }
+
+.eim-price { font-size: 11px; font-weight: 600; color: var(--charcoal); }
+.eim-price.free { color: var(--sage); }
+
+/* ══════════════════════════
+   MARKETPLACE
+══════════════════════════ */
+.product-grid-m {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+.product-card-m {
+  background: white;
+  border-radius: var(--r);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.pcm-image {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  position: relative;
+}
+
+.pcm-badge {
+  position: absolute;
+  top: 6px; left: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 50px;
+  background: white;
+  color: var(--med-brown);
+}
+
+.pcm-body { padding: 10px; }
+.pcm-title { font-size: 12px; font-weight: 600; color: var(--charcoal); margin-bottom: 2px; line-height: 1.3; }
+.pcm-seller { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+.pcm-footer { display: flex; align-items: center; justify-content: space-between; }
+.pcm-price { font-size: 13px; font-weight: 700; color: var(--terra); }
+
+.pcm-buy {
+  background: var(--charcoal);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ══════════════════════════
+   COLLABORATE
+══════════════════════════ */
+.collab-filter-m {
+  padding: 14px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.cf-search-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.cf-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.cf-search {
+  width: 100%;
+  border: 1.5px solid var(--border-med);
+  border-radius: 50px;
+  padding: 10px 16px 10px 36px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--charcoal);
+  outline: none;
+  background: var(--warm-white);
+}
+
+.cf-selects {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.cf-selects::-webkit-scrollbar { display: none; }
+
+.cf-select {
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-med);
+  border-radius: 50px;
+  padding: 7px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--med-brown);
+  background: var(--warm-white);
+  cursor: pointer;
+  outline: none;
+}
+
+.collab-list-m { display: flex; flex-direction: column; gap: 10px; padding: 16px 20px; }
+
+.collab-card-m {
+  background: white;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 14px;
+  cursor: pointer;
+}
+
+.ccm-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+
+.ccm-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 50px;
+}
+
+.ccm-time { font-size: 11px; color: var(--muted); }
+
+.ccm-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--charcoal); margin-bottom: 6px; line-height: 1.3; }
+.ccm-desc { font-size: 12px; color: var(--med-brown); line-height: 1.6; margin-bottom: 8px; }
+
+.ccm-meta { display: flex; gap: 10px; font-size: 11px; color: var(--muted); margin-bottom: 8px; flex-wrap: wrap; }
+
+.ccm-skills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.ccm-skill { font-size: 10px; padding: 3px 8px; background: var(--cream); border-radius: 50px; color: var(--med-brown); font-weight: 500; }
+
+.ccm-footer { display: flex; align-items: center; justify-content: space-between; }
+.ccm-count { font-size: 11px; color: var(--muted); }
+
+.ccm-apply {
+  background: var(--terra);
+  border: none;
+  color: white;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ══════════════════════════
+   NETWORK
+══════════════════════════ */
+.network-tabs-m {
+  display: flex;
+  border-bottom: 1.5px solid var(--border);
+  background: white;
+  padding: 0 20px;
+}
+
+.net-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 12px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.18s;
+}
+
+.net-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px; left: 0; right: 0;
+  height: 2px;
+  background: var(--terra);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.net-tab.active { color: var(--charcoal); font-weight: 600; }
+.net-tab.active::after { transform: scaleX(1); }
+
+.network-list-m { display: flex; flex-direction: column; gap: 0; }
+
+.net-item-m {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+}
+
+.nim-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: white;
+}
+
+.nim-info { flex: 1; min-width: 0; }
+.nim-name { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+.nim-role { font-size: 11px; color: var(--muted); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nim-mutuals { font-size: 11px; color: var(--terra); }
+
+.nim-chat {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1.5px solid var(--border-med);
+  color: var(--med-brown);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+
+.nim-chat svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* ══════════════════════════
+   PROFILE
+══════════════════════════ */
+.profile-cover-m {
+  height: 140px;
+  position: relative;
+}
+
+.profile-top-m {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-top: -40px;
+  margin-bottom: 12px;
+}
+
+.profile-avatar-m {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 4px solid white;
+  background: var(--terra);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 24px; color: white;
+}
+
+.profile-actions-m { display: flex; gap: 8px; }
+
+.profile-name-m { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; padding: 0 20px; margin-bottom: 2px; }
+.profile-disc-m { font-size: 11px; color: var(--terra); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 20px; margin-bottom: 4px; }
+.profile-loc-m { font-size: 12px; color: var(--muted); padding: 0 20px; margin-bottom: 10px; }
+.profile-bio-m { font-size: 13px; color: var(--med-brown); line-height: 1.65; padding: 0 20px; margin-bottom: 14px; }
+
+.profile-stats-m {
+  display: flex;
+  padding: 0 20px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+  gap: 0;
+}
+
+.pstat { flex: 1; text-align: center; }
+.pstat-num { font-size: 18px; font-weight: 700; color: var(--charcoal); }
+.pstat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.profile-tabs-m {
+  display: flex;
+  border-bottom: 1.5px solid var(--border);
+  padding: 0 20px;
+}
+
+.ptab {
+  flex: 1;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 10px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.18s;
+  text-align: center;
+}
+
+.ptab::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px; left: 0; right: 0;
+  height: 2px;
+  background: var(--terra);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.ptab.active { color: var(--charcoal); font-weight: 600; }
+.ptab.active::after { transform: scaleX(1); }
+
+.portfolio-grid-m {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.portfolio-item-m {
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.portfolio-overlay-m {
+  position: absolute;
+  inset: 0;
+  background: rgba(30,26,23,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  padding: 4px;
+}
+
+.portfolio-item-m:active .portfolio-overlay-m { background: rgba(30,26,23,0.5); }
+
+/* ══════════════════════════
+   RESOURCES
+══════════════════════════ */
+.res-search-m {
+  padding: 14px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.rsm-wrap {
+  position: relative;
+}
+
+.rsm-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.rsm-input {
+  width: 100%;
+  border: 1.5px solid var(--border-med);
+  border-radius: 50px;
+  padding: 10px 16px 10px 36px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--charcoal);
+  outline: none;
+  background: var(--warm-white);
+}
+
+.res-cat-chips {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px 4px;
+  overflow-x: auto;
+}
+
+.res-cat-chips::-webkit-scrollbar { display: none; }
+
+.res-cat-chip {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px solid var(--border-med);
+  background: transparent;
+  color: var(--med-brown);
+  transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.res-cat-chip.active { background: var(--terra); color: white; border-color: var(--terra); }
+
+/* local banner */
+.res-local-banner-m {
+  margin: 12px 20px;
+  background: var(--charcoal);
+  border-radius: var(--r);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rlb-icon { font-size: 28px; }
+.rlb-info { flex: 1; }
+.rlb-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terra-l); margin-bottom: 2px; }
+.rlb-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 2px; }
+.rlb-sub { font-size: 11px; color: var(--sand); }
+
+.rlb-btn {
+  background: var(--terra);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.res-list-m { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 20px; }
+
+.res-card-m {
+  background: white;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 14px;
+  cursor: pointer;
+}
+
+.rcm-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.rcm-icon-wrap { display: flex; align-items: center; gap: 8px; }
+
+.rcm-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.rcm-cat { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+.rcm-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 600; color: var(--charcoal); line-height: 1.3; }
+.rcm-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+
+.rcm-local-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 3px 7px;
+  border-radius: 50px;
+  background: #E8F5E9;
+  color: #2E7D32;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.rcm-footer { display: flex; align-items: center; justify-content: space-between; }
+.rcm-link { font-size: 12px; font-weight: 600; color: var(--terra); }
+.rcm-city { font-size: 10px; color: var(--muted); background: var(--cream); padding: 2px 7px; border-radius: 50px; }
+
+/* ══════════════════════════
+   SHARED HELPERS
+══════════════════════════ */
+.bg-terra { background: #C4622D; }
+.bg-sage { background: #7A9E7E; }
+.bg-indigo { background: #4A5899; }
+.bg-gold { background: #C9933A; }
+.bg-teal { background: #3D8E8E; }
+.bg-plum { background: #6B4E71; }
+.bg-rust { background: #8B4513; }
+.bg-forest { background: #2E6B4F; }
+.cover-terra { background: linear-gradient(135deg,#C4622D,#E8825A); }
+.cover-sage { background: linear-gradient(135deg,#7A9E7E,#A8C5AB); }
+.cover-indigo { background: linear-gradient(135deg,#4A5899,#7B86C4); }
+.cover-gold { background: linear-gradient(135deg,#C9933A,#E8C070); }
+.cover-plum { background: linear-gradient(135deg,#6B4E71,#9E7DA5); }
+.cover-teal { background: linear-gradient(135deg,#3D8E8E,#6FC5C5); }
+
+.tag-paid { background:#E8F5E9; color:#2E7D32; }
+.tag-volunteer { background:#FFF3E0; color:#E65100; }
+.tag-trade { background:#E8EAF6; color:#283593; }
+
+.type-exhibit { background:#E8EAF6; color:#283593; }
+.type-workshop { background:#E8F5E9; color:#2E7D32; }
+.type-networking { background:#FCE4EC; color:#880E4F; }
+.type-panel { background:var(--terra-pale); color:var(--terra); }
+.type-market { background:#F3E5F5; color:#6A1B9A; }
+
+.btn-sm-outline {
+  background: transparent;
+  border: 1.5px solid var(--border-med);
+  color: var(--charcoal);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-sm-primary {
+  background: var(--terra);
+  border: none;
+  color: white;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.divider-m { height: 1px; background: var(--border); margin: 0 20px; }
+
+/* FAB */
+.fab-m {
+  position: fixed;
+  bottom: calc(var(--tab-h) + 16px);
+  right: 20px;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--terra);
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(196,98,45,0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+</style>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-time">9:41</div>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1 6l11 13L23 6"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="8" width="4" height="12" rx="1"/><rect x="8" y="5" width="4" height="15" rx="1"/><rect x="14" y="2" width="4" height="18" rx="1"/><rect x="20" y="1" width="3" height="19" rx="1" opacity="0.3"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="3" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo">KIN<span>.</span></div>
+    <div class="top-bar-right">
+      <button class="notif-btn">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </button>
+      <div class="avatar-top" onclick="showPage('profile')">JA</div>
+    </div>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area">
+
+    <!-- ═══ DISCOVER ═══ -->
+    <div class="page active" id="page-discover">
+      <div class="discover-hero">
+        <div class="hero-eyebrow">Welcome to KIN</div>
+        <div class="hero-headline">A home for <em>BIPOC creators</em> to connect & thrive</div>
+        <div class="mobile-search">
+          <input type="text" placeholder="Search creators, cities..."/>
+          <button>Search</button>
+        </div>
+      </div>
+
+      <div class="chip-scroll">
+        <button class="chip active" onclick="filterChip(this)">All</button>
+        <button class="chip" onclick="filterChip(this)">Photography</button>
+        <button class="chip" onclick="filterChip(this)">Design</button>
+        <button class="chip" onclick="filterChip(this)">Painting</button>
+        <button class="chip" onclick="filterChip(this)">Fashion</button>
+        <button class="chip" onclick="filterChip(this)">Sculpture</button>
+        <button class="chip" onclick="filterChip(this)">Film</button>
+        <button class="chip" onclick="filterChip(this)">Music</button>
+        <button class="chip" onclick="filterChip(this)">Murals</button>
+        <button class="chip" onclick="filterChip(this)">Writing</button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-header">
+          <div class="sec-title">Featured Creators</div>
+          <button class="sec-link">See all →</button>
+        </div>
+      </div>
+
+      <div class="creator-scroll">
+        <div class="creator-card-m" onclick="showPage('profile')">
+          <div class="cc-cover cover-terra"><span class="cc-badge">Photography</span></div>
+          <div class="cc-body">
+            <div class="cc-avatar-wrap"><div class="cc-avatar bg-terra">RM</div></div>
+            <div class="cc-name">Rania Mousa</div>
+            <div class="cc-loc">📍 Los Angeles</div>
+            <button class="cc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+        </div>
+        <div class="creator-card-m">
+          <div class="cc-cover cover-indigo"><span class="cc-badge">Graphic Design</span></div>
+          <div class="cc-body">
+            <div class="cc-avatar-wrap"><div class="cc-avatar bg-indigo">KT</div></div>
+            <div class="cc-name">Kofi Twumasi</div>
+            <div class="cc-loc">📍 Atlanta</div>
+            <button class="cc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+        </div>
+        <div class="creator-card-m">
+          <div class="cc-cover cover-sage"><span class="cc-badge">Fashion</span></div>
+          <div class="cc-body">
+            <div class="cc-avatar-wrap"><div class="cc-avatar bg-sage">LV</div></div>
+            <div class="cc-name">Luz Vargas</div>
+            <div class="cc-loc">📍 Miami</div>
+            <button class="cc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+        </div>
+        <div class="creator-card-m">
+          <div class="cc-cover cover-gold"><span class="cc-badge">Sculpture</span></div>
+          <div class="cc-body">
+            <div class="cc-avatar-wrap"><div class="cc-avatar bg-gold">DN</div></div>
+            <div class="cc-name">Deja Nwosu</div>
+            <div class="cc-loc">📍 Chicago</div>
+            <button class="cc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+        </div>
+        <div class="creator-card-m">
+          <div class="cc-cover cover-plum"><span class="cc-badge">Mural Art</span></div>
+          <div class="cc-body">
+            <div class="cc-avatar-wrap"><div class="cc-avatar bg-plum">MR</div></div>
+            <div class="cc-name">Marcus Reyes</div>
+            <div class="cc-loc">📍 Houston</div>
+            <button class="cc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec" style="margin-top:16px;">
+        <div class="sec-header">
+          <div class="sec-title">Creators Near You</div>
+          <button class="sec-link">See all →</button>
+        </div>
+        <div class="featured-list">
+          <div class="featured-card" onclick="showPage('profile')">
+            <div class="fc-avatar cover-teal">AO</div>
+            <div class="fc-info">
+              <div class="fc-discipline">Film</div>
+              <div class="fc-name">Amara Osei</div>
+              <div class="fc-loc">📍 Oakland, CA · 12 mi away</div>
+            </div>
+            <button class="fc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+          <div class="featured-card">
+            <div class="fc-avatar bg-rust" style="color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">PR</div>
+            <div class="fc-info">
+              <div class="fc-discipline">Illustration</div>
+              <div class="fc-name">Priya Rao</div>
+              <div class="fc-loc">📍 Los Angeles, CA · 4 mi away</div>
+            </div>
+            <button class="fc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+          <div class="featured-card">
+            <div class="fc-avatar bg-forest" style="color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">SO</div>
+            <div class="fc-info">
+              <div class="fc-discipline">Ceramics</div>
+              <div class="fc-name">Sofia Ortega</div>
+              <div class="fc-loc">📍 Los Angeles, CA · 7 mi away</div>
+            </div>
+            <button class="fc-connect" onclick="toggleConnectM(event,this)">+ Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COMMUNITY ═══ -->
+    <div class="page" id="page-timeline">
+      <div class="feed-tabs">
+        <button class="feed-tab active" onclick="switchTab(this)">For You</button>
+        <button class="feed-tab" onclick="switchTab(this)">Network</button>
+        <button class="feed-tab" onclick="switchTab(this)">City</button>
+        <button class="feed-tab" onclick="switchTab(this)">Trending</button>
+      </div>
+
+      <div class="compose-strip">
+        <div class="compose-avatar-s">JA</div>
+        <div class="compose-input-fake">Share your work or a win...</div>
+      </div>
+
+      <div class="post-list">
+
+        <!-- Milestone post -->
+        <div class="post-card-m">
+          <div class="post-head">
+            <div class="post-avatar-m bg-terra">RM</div>
+            <div class="post-meta-m">
+              <div class="post-author-m">Rania Mousa</div>
+              <div class="post-role-m">Photographer · Los Angeles</div>
+            </div>
+            <div class="post-time-m">2h</div>
+            <button class="post-more">···</button>
+          </div>
+          <div class="post-milestone-m">
+            <div class="milestone-label-m">🏆 Milestone</div>
+            <div class="milestone-title-m">"Roots & Rising" exhibit sold out in 48 hours.</div>
+            <div class="milestone-sub-m">After 2 years of shooting this series in LA community centers, I can't believe this moment is real. Thank you KIN. 🌿</div>
+            <div class="milestone-author-m">
+              <div class="post-avatar-m bg-terra" style="width:28px;height:28px;font-size:10px;flex-shrink:0;">RM</div>
+              <div><div class="ma-name">Rania Mousa</div><div class="ma-sub">Los Angeles · 2h ago</div></div>
+            </div>
+          </div>
+          <div class="post-actions-m">
+            <button class="post-action-m" onclick="likeMobile(this)">♡ 142</button>
+            <button class="post-action-m">💬 28</button>
+            <button class="post-action-m">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Image post -->
+        <div class="post-card-m">
+          <div class="post-head">
+            <div class="post-avatar-m bg-indigo">KT</div>
+            <div class="post-meta-m">
+              <div class="post-author-m">Kofi Twumasi</div>
+              <div class="post-role-m">Graphic Designer · Atlanta</div>
+            </div>
+            <div class="post-time-m">4h</div>
+            <button class="post-more">···</button>
+          </div>
+          <div class="post-body-m">New brand identity for a Black-owned restaurant group in Atlanta. Rooted in West African textile patterns. This is the work that fills my soul. 🖤</div>
+          <div class="post-media-m cover-indigo">🎨</div>
+          <div class="post-tags-m">
+            <span class="post-tag-m">#GraphicDesign</span>
+            <span class="post-tag-m">#BlackOwned</span>
+            <span class="post-tag-m">#AfricanArt</span>
+          </div>
+          <div class="post-actions-m">
+            <button class="post-action-m" onclick="likeMobile(this)">♡ 89</button>
+            <button class="post-action-m">💬 14</button>
+            <button class="post-action-m">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Opportunity post -->
+        <div class="post-card-m">
+          <div class="post-head">
+            <div class="post-avatar-m bg-sage">LV</div>
+            <div class="post-meta-m">
+              <div class="post-author-m">Luz Vargas</div>
+              <div class="post-role-m">Fashion Designer · Miami</div>
+            </div>
+            <div class="post-time-m">6h</div>
+            <button class="post-more">···</button>
+          </div>
+          <div class="post-body-m"><strong>Looking for a photographer in Miami!</strong> SS26 lookbook shoot. Budget is real. Check the Collab Board for the full post. Let's keep the money in the community. 🌿</div>
+          <div class="post-tags-m">
+            <span class="post-tag-m">#HiringNow</span>
+            <span class="post-tag-m">#MiamiFashion</span>
+            <span class="post-tag-m">#KINOpportunity</span>
+          </div>
+          <div class="post-actions-m">
+            <button class="post-action-m" onclick="likeMobile(this)">♡ 57</button>
+            <button class="post-action-m">💬 31</button>
+            <button class="post-action-m">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Resource share -->
+        <div class="post-card-m">
+          <div class="post-head">
+            <div class="post-avatar-m bg-teal">AO</div>
+            <div class="post-meta-m">
+              <div class="post-author-m">Amara Osei</div>
+              <div class="post-role-m">Filmmaker · Oakland</div>
+            </div>
+            <div class="post-time-m">Yesterday</div>
+            <button class="post-more">···</button>
+          </div>
+          <div class="post-body-m">PSA: <strong>Sundance BIPOC Filmmakers Grant</strong> deadline July 31st. $10k–$25k. Got it last year — happy to review your app. Drop a comment. We move together. 🎬</div>
+          <div class="post-tags-m">
+            <span class="post-tag-m">#FilmGrant</span>
+            <span class="post-tag-m">#BIPOC</span>
+            <span class="post-tag-m">#ResourceShare</span>
+          </div>
+          <div class="post-actions-m">
+            <button class="post-action-m" onclick="likeMobile(this)">♡ 178</button>
+            <button class="post-action-m">💬 62</button>
+            <button class="post-action-m">↗ Share</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ MARKETPLACE ═══ -->
+    <div class="page" id="page-marketplace">
+      <div class="sec">
+        <div class="sec-header">
+          <div class="sec-title">Marketplace</div>
+          <button class="btn-sm-primary">+ List</button>
+        </div>
+      </div>
+
+      <div class="chip-scroll" style="padding-top:0;">
+        <button class="chip active" onclick="filterChip(this)">All</button>
+        <button class="chip" onclick="filterChip(this)">Art & Prints</button>
+        <button class="chip" onclick="filterChip(this)">Fashion</button>
+        <button class="chip" onclick="filterChip(this)">Services</button>
+        <button class="chip" onclick="filterChip(this)">Digital</button>
+      </div>
+
+      <div class="product-grid-m">
+        <div class="product-card-m">
+          <div class="pcm-image cover-terra"><span class="pcm-badge">Print</span>🎨</div>
+          <div class="pcm-body">
+            <div class="pcm-title">"Roots & Rising" Limited Print</div>
+            <div class="pcm-seller">Rania Mousa · LA</div>
+            <div class="pcm-footer"><span class="pcm-price">$120</span><button class="pcm-buy">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card-m">
+          <div class="pcm-image cover-indigo"><span class="pcm-badge">Fashion</span>👕</div>
+          <div class="pcm-body">
+            <div class="pcm-title">Heritage Drop Hand-Painted Tee</div>
+            <div class="pcm-seller">Luz Vargas · Miami</div>
+            <div class="pcm-footer"><span class="pcm-price">$85</span><button class="pcm-buy">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card-m">
+          <div class="pcm-image cover-sage"><span class="pcm-badge">Service</span>📸</div>
+          <div class="pcm-body">
+            <div class="pcm-title">Brand Photography Session</div>
+            <div class="pcm-seller">Kofi Twumasi · ATL</div>
+            <div class="pcm-footer"><span class="pcm-price">$350</span><button class="pcm-buy">Book</button></div>
+          </div>
+        </div>
+        <div class="product-card-m">
+          <div class="pcm-image cover-plum"><span class="pcm-badge">Sculpture</span>🗿</div>
+          <div class="pcm-body">
+            <div class="pcm-title">Terracotta Vessel Series No. 3</div>
+            <div class="pcm-seller">Deja Nwosu · Chicago</div>
+            <div class="pcm-footer"><span class="pcm-price">$680</span><button class="pcm-buy">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card-m">
+          <div class="pcm-image cover-teal"><span class="pcm-badge">Digital</span>🎬</div>
+          <div class="pcm-body">
+            <div class="pcm-title">Short Film Editing Package</div>
+            <div class="pcm-seller">Amara Osei · Oakland</div>
+            <div class="pcm-footer"><span class="pcm-price">$500</span><button class="pcm-buy">Book</button></div>
+          </div>
+        </div>
+        <div class="product-card-m">
+          <div class="pcm-image cover-gold"><span class="pcm-badge">Print</span>🖼️</div>
+          <div class="pcm-body">
+            <div class="pcm-title">Ancestors Giclee Print 24×36</div>
+            <div class="pcm-seller">Marcus Reyes · Houston</div>
+            <div class="pcm-footer"><span class="pcm-price">$200</span><button class="pcm-buy">Buy</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COLLABORATE ═══ -->
+    <div class="page" id="page-collab">
+      <div class="collab-filter-m">
+        <div class="cf-search-wrap">
+          <span class="cf-search-icon">🔍</span>
+          <input class="cf-search" type="text" placeholder="Search by keyword or skill..."/>
+        </div>
+        <div class="cf-selects">
+          <select class="cf-select"><option>All Cities</option><option>Los Angeles</option><option>Atlanta</option><option>Houston</option><option>Chicago</option><option>Miami</option><option>NYC</option><option>Remote</option></select>
+          <select class="cf-select"><option>All Disciplines</option><option>Film</option><option>Photography</option><option>Design</option><option>Mural</option><option>Fashion</option><option>Music</option><option>Writing</option></select>
+          <select class="cf-select"><option>Any Pay</option><option>Paid</option><option>Trade</option><option>Volunteer</option></select>
+          <select class="cf-select"><option>Recent</option><option>Most Applied</option><option>Deadline Soon</option></select>
+        </div>
+      </div>
+
+      <div style="padding:12px 20px 4px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--muted);">7 opportunities</span>
+        <button class="btn-sm-primary" style="font-size:11px;padding:6px 12px;">+ Post Opportunity</button>
+      </div>
+
+      <div class="collab-list-m">
+
+        <div class="collab-card-m">
+          <div class="ccm-top"><span class="ccm-tag tag-paid">Paid</span><span class="ccm-time">1 day ago</span></div>
+          <div class="ccm-title">Album Cover & Merch Design</div>
+          <div class="ccm-desc">Houston-based rapper releasing debut LP. Need a graphic designer for full visual identity — cover, promo, merch.</div>
+          <div class="ccm-meta"><span>📍 Houston or Remote</span><span>💰 $1,500 flat</span></div>
+          <div class="ccm-skills"><span class="ccm-skill">Graphic Design</span><span class="ccm-skill">Brand Identity</span><span class="ccm-skill">Merch</span></div>
+          <div class="ccm-footer"><span class="ccm-count">52 applicants</span><button class="ccm-apply">Apply to Collab</button></div>
+        </div>
+
+        <div class="collab-card-m">
+          <div class="ccm-top"><span class="ccm-tag tag-paid">Paid</span><span class="ccm-time">2 days ago</span></div>
+          <div class="ccm-title">Independent Film — "Entre Mundos"</div>
+          <div class="ccm-desc">Feature film by a Latina director. Seeking cinematographer, costume designer, and PA for 3-week shoot in East LA.</div>
+          <div class="ccm-meta"><span>📍 Los Angeles</span><span>💰 $800–$1,200/wk</span></div>
+          <div class="ccm-skills"><span class="ccm-skill">Cinematography</span><span class="ccm-skill">Costume Design</span></div>
+          <div class="ccm-footer"><span class="ccm-count">34 applicants</span><button class="ccm-apply">Apply to Collab</button></div>
+        </div>
+
+        <div class="collab-card-m">
+          <div class="ccm-top"><span class="ccm-tag tag-paid">Paid</span><span class="ccm-time">3 days ago</span></div>
+          <div class="ccm-title">Fashion Brand Lookbook Shoot</div>
+          <div class="ccm-desc">Black-owned streetwear brand. Needs photographer, stylist, and makeup artist for 1-day lookbook shoot in Miami.</div>
+          <div class="ccm-meta"><span>📍 Miami, FL</span><span>💰 $300–$600/role</span></div>
+          <div class="ccm-skills"><span class="ccm-skill">Photography</span><span class="ccm-skill">Styling</span><span class="ccm-skill">Makeup</span></div>
+          <div class="ccm-footer"><span class="ccm-count">41 applicants</span><button class="ccm-apply">Apply to Collab</button></div>
+        </div>
+
+        <div class="collab-card-m">
+          <div class="ccm-top"><span class="ccm-tag tag-trade">Trade</span><span class="ccm-time">4 days ago</span></div>
+          <div class="ccm-title">Pop-up Exhibition — Collective Show</div>
+          <div class="ccm-desc">Multi-discipline pop-up in Atlanta this fall. Looking for visual artists, a DJ, and an installation artist.</div>
+          <div class="ccm-meta"><span>📍 Atlanta, GA</span><span>🎨 Skills Trade</span></div>
+          <div class="ccm-skills"><span class="ccm-skill">Visual Art</span><span class="ccm-skill">Installation</span><span class="ccm-skill">DJ</span></div>
+          <div class="ccm-footer"><span class="ccm-count">18 applicants</span><button class="ccm-apply">Apply to Collab</button></div>
+        </div>
+
+        <div class="collab-card-m">
+          <div class="ccm-top"><span class="ccm-tag tag-volunteer">Volunteer</span><span class="ccm-time">6 days ago</span></div>
+          <div class="ccm-title">Youth Mural Project — Community Wall</div>
+          <div class="ccm-desc">Nonprofit needs mural artists for a neighborhood beautification project in South Chicago. Great for portfolio.</div>
+          <div class="ccm-meta"><span>📍 Chicago, IL</span><span>🤝 Portfolio Credit</span></div>
+          <div class="ccm-skills"><span class="ccm-skill">Mural Art</span><span class="ccm-skill">Community Arts</span></div>
+          <div class="ccm-footer"><span class="ccm-count">9 applicants</span><button class="ccm-apply">Apply to Collab</button></div>
+        </div>
+
+      </div>
+      <button class="fab-m">+</button>
+    </div>
+
+    <!-- ═══ EVENTS ═══ -->
+    <div class="page" id="page-events">
+      <div class="event-featured-m">
+        <div class="efm-bg">🎨</div>
+        <div class="efm-content">
+          <span class="efm-badge">✦ Featured</span>
+          <div class="efm-title">KIN Creator Summit 2025 — LA</div>
+          <div class="efm-meta">
+            <span>📅 April 19–20</span>
+            <span>📍 The Broad, DTLA</span>
+            <span>🎟 Free–$45</span>
+          </div>
+          <div class="efm-actions">
+            <button class="btn-white-m">RSVP Now</button>
+            <button class="btn-ghost-m">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chip-scroll" style="padding-top:4px;">
+        <button class="chip active" onclick="filterChip(this)">All Events</button>
+        <button class="chip" onclick="filterChip(this)">Exhibitions</button>
+        <button class="chip" onclick="filterChip(this)">Workshops</button>
+        <button class="chip" onclick="filterChip(this)">Networking</button>
+        <button class="chip" onclick="filterChip(this)">Markets</button>
+        <button class="chip" onclick="filterChip(this)">Online</button>
+      </div>
+
+      <div class="event-list-m">
+
+        <div class="event-item-m">
+          <div class="eim-date"><div class="eim-month">Apr</div><div class="eim-day">5</div><div class="eim-dow">Sat</div></div>
+          <div class="eim-info">
+            <span class="eim-type type-networking">Networking</span>
+            <div class="eim-title">KIN LA Meetup — Portfolio Night</div>
+            <div class="eim-details">📍 The Broad, DTLA · 6–9 PM</div>
+          </div>
+          <div class="eim-rsvp"><button class="rsvp-btn-m" onclick="toggleRsvpM(this)">RSVP</button><span class="eim-price free">Free</span></div>
+        </div>
+
+        <div class="event-item-m">
+          <div class="eim-date"><div class="eim-month">Apr</div><div class="eim-day">12</div><div class="eim-dow">Sat</div></div>
+          <div class="eim-info">
+            <span class="eim-type type-workshop">Workshop</span>
+            <div class="eim-title">Pricing Your Art: Know Your Worth</div>
+            <div class="eim-details">📍 Spelman College, Atlanta · 10 AM</div>
+          </div>
+          <div class="eim-rsvp"><button class="rsvp-btn-m" onclick="toggleRsvpM(this)">RSVP</button><span class="eim-price">$15</span></div>
+        </div>
+
+        <div class="event-item-m">
+          <div class="eim-date"><div class="eim-month">Apr</div><div class="eim-day">19</div><div class="eim-dow">Sat</div></div>
+          <div class="eim-info">
+            <span class="eim-type type-exhibit">Exhibition</span>
+            <div class="eim-title">KIN Creator Summit — Day 1</div>
+            <div class="eim-details">📍 The Broad, Los Angeles · 10 AM</div>
+          </div>
+          <div class="eim-rsvp"><button class="rsvp-btn-m" onclick="toggleRsvpM(this)">RSVP</button><span class="eim-price">$25</span></div>
+        </div>
+
+        <div class="event-item-m">
+          <div class="eim-date"><div class="eim-month">Apr</div><div class="eim-day">26</div><div class="eim-dow">Sat</div></div>
+          <div class="eim-info">
+            <span class="eim-type type-market">Market</span>
+            <div class="eim-title">KIN Black Arts Market — Miami</div>
+            <div class="eim-details">📍 Wynwood Walls · 11 AM–6 PM</div>
+          </div>
+          <div class="eim-rsvp"><button class="rsvp-btn-m" onclick="toggleRsvpM(this)">RSVP</button><span class="eim-price free">Free</span></div>
+        </div>
+
+        <div class="event-item-m">
+          <div class="eim-date"><div class="eim-month">May</div><div class="eim-day">3</div><div class="eim-dow">Sat</div></div>
+          <div class="eim-info">
+            <span class="eim-type type-panel">Panel</span>
+            <div class="eim-title">From Creator to CEO</div>
+            <div class="eim-details">📍 Online / Zoom · 2–4 PM EST</div>
+          </div>
+          <div class="eim-rsvp"><button class="rsvp-btn-m" onclick="toggleRsvpM(this)">RSVP</button><span class="eim-price free">Free</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ NETWORK ═══ -->
+    <div class="page" id="page-network">
+      <div style="padding:16px 20px 12px;display:flex;align-items:baseline;justify-content:space-between;">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:2px;">Your Network</div>
+          <div style="font-size:12px;color:var(--muted);">128 connections · 24 pending</div>
+        </div>
+      </div>
+      <div style="padding:0 20px 12px;">
+        <div style="position:relative;">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;">🔍</span>
+          <input style="width:100%;border:1.5px solid var(--border-med);border-radius:50px;padding:9px 16px 9px 34px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--charcoal);outline:none;background:var(--warm-white);" placeholder="Search connections..."/>
+        </div>
+      </div>
+
+      <div class="network-tabs-m">
+        <button class="net-tab active" onclick="switchTab(this)">Connections</button>
+        <button class="net-tab" onclick="switchTab(this)">Suggested</button>
+        <button class="net-tab" onclick="switchTab(this)">Pending (24)</button>
+      </div>
+
+      <div class="network-list-m">
+        <div class="net-item-m"><div class="nim-avatar bg-terra">RM</div><div class="nim-info"><div class="nim-name">Rania Mousa</div><div class="nim-role">Photographer · Los Angeles, CA</div><div class="nim-mutuals">🔗 3 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-indigo">KT</div><div class="nim-info"><div class="nim-name">Kofi Twumasi</div><div class="nim-role">Graphic Designer · Atlanta, GA</div><div class="nim-mutuals">🔗 7 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-sage">LV</div><div class="nim-info"><div class="nim-name">Luz Vargas</div><div class="nim-role">Fashion Designer · Miami, FL</div><div class="nim-mutuals">🔗 2 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-plum">MR</div><div class="nim-info"><div class="nim-name">Marcus Reyes</div><div class="nim-role">Mural Artist · Houston, TX</div><div class="nim-mutuals">🔗 5 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-gold">DN</div><div class="nim-info"><div class="nim-name">Deja Nwosu</div><div class="nim-role">Sculptor · Chicago, IL</div><div class="nim-mutuals">🔗 1 mutual connection</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-teal">AO</div><div class="nim-info"><div class="nim-name">Amara Osei</div><div class="nim-role">Filmmaker · Oakland, CA</div><div class="nim-mutuals">🔗 4 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-rust">PR</div><div class="nim-info"><div class="nim-name">Priya Rao</div><div class="nim-role">Illustrator · New York, NY</div><div class="nim-mutuals">🔗 6 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+        <div class="net-item-m"><div class="nim-avatar bg-forest">JW</div><div class="nim-info"><div class="nim-name">Jabari Washington</div><div class="nim-role">Musician · Atlanta, GA</div><div class="nim-mutuals">🔗 2 mutual connections</div></div><button class="nim-chat"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button></div>
+      </div>
+    </div>
+
+    <!-- ═══ RESOURCES ═══ -->
+    <div class="page" id="page-resources">
+      <div class="res-search-m">
+        <div class="rsm-wrap">
+          <span class="rsm-icon">🔍</span>
+          <input class="rsm-input" type="text" placeholder="Search grants, therapy, legal help..."/>
+        </div>
+      </div>
+
+      <div class="res-cat-chips">
+        <button class="res-cat-chip active" onclick="filterChip(this)">✦ All</button>
+        <button class="res-cat-chip" onclick="filterChip(this)">📍 In Your Area</button>
+        <button class="res-cat-chip" onclick="filterChip(this)">💰 Financial</button>
+        <button class="res-cat-chip" onclick="filterChip(this)">🏆 Grants</button>
+        <button class="res-cat-chip" onclick="filterChip(this)">💜 Mental Health</button>
+        <button class="res-cat-chip" onclick="filterChip(this)">⚖️ Legal</button>
+        <button class="res-cat-chip" onclick="filterChip(this)">🌱 Business</button>
+      </div>
+
+      <div class="res-local-banner-m">
+        <div class="rlb-icon">📍</div>
+        <div class="rlb-info">
+          <div class="rlb-label">Your Location</div>
+          <div class="rlb-title">Los Angeles, CA</div>
+          <div class="rlb-sub">5 resources available in your city</div>
+        </div>
+        <button class="rlb-btn">View →</button>
+      </div>
+
+      <div class="res-list-m">
+
+        <div class="res-card-m">
+          <div class="rcm-top">
+            <div class="rcm-icon-wrap">
+              <div class="rcm-icon" style="background:#FFF3E0;">🏆</div>
+              <div><div class="rcm-cat" style="color:var(--gold);">Grants</div><div class="rcm-title">BIPOC Artist Grants 2025 — National</div></div>
+            </div>
+          </div>
+          <div class="rcm-desc">Curated list of national grants for BIPOC creators across all disciplines. Updated quarterly with deadlines.</div>
+          <div class="rcm-footer"><a class="rcm-link">View All Grants →</a><span class="rcm-city">🌐 National</span></div>
+        </div>
+
+        <div class="res-card-m">
+          <div class="rcm-top">
+            <div class="rcm-icon-wrap">
+              <div class="rcm-icon" style="background:#FFF3E0;">🏆</div>
+              <div><div class="rcm-cat" style="color:var(--gold);">Grants</div><div class="rcm-title">LA Dept of Cultural Affairs — Artist Grant</div></div>
+            </div>
+            <span class="rcm-local-badge">📍 LA Only</span>
+          </div>
+          <div class="rcm-desc">City of LA annual grant offering $5k–$25k to LA-based artists. Application opens June 1.</div>
+          <div class="rcm-footer"><a class="rcm-link">Apply Now →</a><span class="rcm-city">📍 Los Angeles</span></div>
+        </div>
+
+        <div class="res-card-m">
+          <div class="rcm-top">
+            <div class="rcm-icon-wrap">
+              <div class="rcm-icon" style="background:#FCE4EC;">💜</div>
+              <div><div class="rcm-cat" style="color:#C2185B;">Mental Health</div><div class="rcm-title">Therapy for Black Girls — Directory</div></div>
+            </div>
+          </div>
+          <div class="rcm-desc">Find licensed Black therapists who understand the creative journey. Filter by specialty and insurance.</div>
+          <div class="rcm-footer"><a class="rcm-link">Find a Therapist →</a><span class="rcm-city">🌐 National</span></div>
+        </div>
+
+        <div class="res-card-m">
+          <div class="rcm-top">
+            <div class="rcm-icon-wrap">
+              <div class="rcm-icon" style="background:#FCE4EC;">🧠</div>
+              <div><div class="rcm-cat" style="color:#C2185B;">Mental Health</div><div class="rcm-title">Didi Hirsch — LA Free Counseling</div></div>
+            </div>
+            <span class="rcm-local-badge">📍 LA Only</span>
+          </div>
+          <div class="rcm-desc">Free and sliding-scale mental health services for LA residents including creative burnout support.</div>
+          <div class="rcm-footer"><a class="rcm-link">Get Support →</a><span class="rcm-city">📍 Los Angeles</span></div>
+        </div>
+
+        <div class="res-card-m">
+          <div class="rcm-top">
+            <div class="rcm-icon-wrap">
+              <div class="rcm-icon" style="background:#E8EAF6;">⚖️</div>
+              <div><div class="rcm-cat" style="color:var(--indigo);">Legal & IP</div><div class="rcm-title">Protect Your Art — Copyright Basics</div></div>
+            </div>
+          </div>
+          <div class="rcm-desc">Plain-language guide to copyright, licensing, and protecting your creative work. Free legal clinic links.</div>
+          <div class="rcm-footer"><a class="rcm-link">Read Guide →</a><span class="rcm-city">🌐 National</span></div>
+        </div>
+
+        <div class="res-card-m">
+          <div class="rcm-top">
+            <div class="rcm-icon-wrap">
+              <div class="rcm-icon" style="background:#E8F5E9;">🌱</div>
+              <div><div class="rcm-cat" style="color:var(--sage);">Business</div><div class="rcm-title">Turn Your Craft Into a Business</div></div>
+            </div>
+          </div>
+          <div class="rcm-desc">Free workshop series on pricing, client-building, LLC setup, and taxes as a creative entrepreneur.</div>
+          <div class="rcm-footer"><a class="rcm-link">Register Free →</a><span class="rcm-city">🌐 National</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ PROFILE ═══ -->
+    <div class="page" id="page-profile">
+      <div class="profile-cover-m cover-terra"></div>
+      <div class="profile-top-m">
+        <div class="profile-avatar-m">JA</div>
+        <div class="profile-actions-m">
+          <button class="btn-sm-primary">Edit</button>
+          <button class="btn-sm-outline">Share</button>
+        </div>
+      </div>
+
+      <div class="profile-name-m">Jordan Amistad</div>
+      <div class="profile-disc-m">Photographer & Visual Storyteller</div>
+      <div class="profile-loc-m">📍 Los Angeles, CA · Available for Commissions</div>
+      <div class="profile-bio-m">Documentary and portrait photographer focused on the African diaspora and stories of community resilience. Featured in galleries across LA, Atlanta, and New York.</div>
+
+      <div class="profile-stats-m">
+        <div class="pstat"><div class="pstat-num">128</div><div class="pstat-label">Connections</div></div>
+        <div class="pstat"><div class="pstat-num">47</div><div class="pstat-label">Works</div></div>
+        <div class="pstat"><div class="pstat-num">12</div><div class="pstat-label">Collabs</div></div>
+        <div class="pstat"><div class="pstat-num">4.9★</div><div class="pstat-label">Rating</div></div>
+      </div>
+
+      <div class="profile-tabs-m">
+        <button class="ptab active" onclick="switchTab(this)">Portfolio</button>
+        <button class="ptab" onclick="switchTab(this)">Shop</button>
+        <button class="ptab" onclick="switchTab(this)">Services</button>
+      </div>
+
+      <div class="portfolio-grid-m">
+        <div class="portfolio-item-m cover-terra"><div class="portfolio-overlay-m">Portrait Series I</div></div>
+        <div class="portfolio-item-m cover-indigo"><div class="portfolio-overlay-m">Community Voices</div></div>
+        <div class="portfolio-item-m cover-gold"><div class="portfolio-overlay-m">Golden Hour</div></div>
+        <div class="portfolio-item-m cover-sage"><div class="portfolio-overlay-m">Nature & Identity</div></div>
+        <div class="portfolio-item-m cover-plum"><div class="portfolio-overlay-m">After Hours</div></div>
+        <div class="portfolio-item-m cover-teal"><div class="portfolio-overlay-m">Ocean Stories</div></div>
+        <div class="portfolio-item-m cover-terra"><div class="portfolio-overlay-m">Roots Project</div></div>
+        <div class="portfolio-item-m cover-gold"><div class="portfolio-overlay-m">Elders Series</div></div>
+        <div class="portfolio-item-m cover-indigo"><div class="portfolio-overlay-m">City Lights</div></div>
+      </div>
+    </div>
+
+  </div><!-- end scroll-area -->
+
+  <!-- ═══ BOTTOM TAB BAR ═══ -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showPage('discover')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <span class="tab-label">Discover</span>
+    </button>
+    <button class="tab-btn" onclick="showPage('timeline')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="tab-label">Community</span>
+    </button>
+    <button class="tab-btn" onclick="showPage('marketplace')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <span class="tab-label">Market</span>
+    </button>
+    <button class="tab-btn" onclick="showPage('collab')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <span class="tab-label">Collab</span>
+    </button>
+    <button class="tab-btn" onclick="showPage('events')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <span class="tab-label">Events</span>
+    </button>
+    <button class="tab-btn" onclick="showPage('network')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/><line x1="20" y1="8" x2="20" y2="14"/></svg>
+      </div>
+      <span class="tab-label">Network</span>
+    </button>
+    <button class="tab-btn" onclick="showPage('resources')">
+      <div class="tab-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <span class="tab-label">Resources</span>
+    </button>
+  </div>
+
+</div><!-- end phone-shell -->
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const map = { discover:0, timeline:1, marketplace:2, collab:3, events:4, network:5, resources:6 };
+  const tabs = document.querySelectorAll('.tab-btn');
+  if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+  document.querySelector('.scroll-area').scrollTop = 0;
+}
+
+function filterChip(el) {
+  const row = el.closest('.chip-scroll') || el.closest('.res-cat-chips');
+  if (row) row.querySelectorAll('.chip, .res-cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function switchTab(el) {
+  const container = el.closest('.feed-tabs') || el.closest('.network-tabs-m') || el.closest('.profile-tabs-m');
+  if (container) container.querySelectorAll('.feed-tab, .net-tab, .ptab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleConnectM(e, btn) {
+  e.stopPropagation();
+  if (btn.classList.contains('requested')) {
+    btn.classList.remove('requested');
+    btn.textContent = '+ Connect';
+  } else {
+    btn.classList.add('requested');
+    btn.textContent = '⏳ Requested';
+  }
+}
+
+function likeMobile(btn) {
+  const count = parseInt(btn.textContent.replace(/[^\d]/g, ''));
+  if (btn.classList.contains('liked')) {
+    btn.classList.remove('liked');
+    btn.textContent = '♡ ' + (count - 1);
+  } else {
+    btn.classList.add('liked');
+    btn.textContent = '♥ ' + (count + 1);
+  }
+}
+
+function toggleRsvpM(btn) {
+  if (btn.classList.contains('going')) {
+    btn.classList.remove('going');
+    btn.textContent = 'RSVP';
+  } else {
+    btn.classList.add('going');
+    btn.textContent = '✓ Going';
+  }
+}
+</script>
+</body>
+</html>
