@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KIN — Rooted Kin Community</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #1E1A17;
+    color: #F5F0E8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: #E8825A;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .logo span { color: #F5F0E8; }
+  .tagline {
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9A8478;
+    margin-bottom: 3rem;
+  }
+  .cards {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 600px;
+  }
+  .card {
+    background: #2D2420;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    text-decoration: none;
+    color: #F5F0E8;
+    flex: 1;
+    min-width: 220px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: #C4622D;
+  }
+  .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #F5F0E8;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: #9A8478;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-btn {
+    display: inline-block;
+    background: #C4622D;
+    color: white;
+    padding: 0.55rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .card:hover .card-btn { background: #E8825A; }
+  .footer {
+    margin-top: 3rem;
+    font-size: 0.75rem;
+    color: #6B5045;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="logo">KIN<span>.</span></div>
+  <div class="tagline">Rooted Kin Community</div>
+
+  <div class="cards">
+    <a href="index.html" class="card">
+      <div class="card-icon">📱</div>
+      <div class="card-title">Mobile App</div>
+      <div class="card-desc">The iPhone experience — optimized for creators on the go.</div>
+      <span class="card-btn">View Mobile →</span>
+    </a>
+    <a href="desktop.html" class="card">
+      <div class="card-icon">🖥️</div>
+      <div class="card-title">Desktop App</div>
+      <div class="card-desc">The full platform experience for web browsers.</div>
+      <span class="card-btn">View Desktop →</span>
+    </a>
+  </div>
+
+  <div class="footer">© 2025 Rooted Kin Community</div>
+</body>
+</html>
+```
+
+Commit that file and your landing page lives at:
+```
+https://yourusername.github.io/kin-app/landing.html
