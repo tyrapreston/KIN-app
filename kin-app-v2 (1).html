@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KIN — For Creators, By Creators</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FDFAF5;
+    --terracotta: #C4622D;
+    --terracotta-light: #E8825A;
+    --terracotta-pale: #F5DDD3;
+    --charcoal: #1E1A17;
+    --dark-brown: #2D2420;
+    --medium-brown: #6B5045;
+    --muted: #9A8478;
+    --sand: #D9CFC4;
+    --sage: #7A9E7E;
+    --indigo: #4A5899;
+    --gold: #C9933A;
+    --border: rgba(30,26,23,0.10);
+    --border-med: rgba(30,26,23,0.18);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+    --shadow: 0 2px 16px rgba(30,26,23,0.07);
+    --shadow-lg: 0 8px 40px rgba(30,26,23,0.13);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--charcoal); min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* NAV */
+  nav { background: var(--charcoal); color: var(--cream); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 900; letter-spacing: -0.02em; color: var(--terracotta-light); }
+  .logo span { color: var(--cream); }
+  .nav-links { display: flex; gap: 0.15rem; }
+  .nav-btn { background: none; border: none; color: var(--sand); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 0.4rem 0.75rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.01em; }
+  .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.09); color: var(--cream); }
+  .nav-btn.active { color: var(--terracotta-light); }
+  .nav-right { display: flex; align-items: center; gap: 0.75rem; }
+  .avatar-sm { width: 32px; height: 32px; border-radius: 50%; background: var(--terracotta); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: white; cursor: pointer; }
+
+  /* PAGES */
+  .page { display: none; flex: 1; }
+  .page.active { display: block; animation: fadeUp 0.28s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SHARED */
+  .section { padding: 2rem 2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700; color: var(--charcoal); }
+  .see-all { font-size: 0.82rem; color: var(--terracotta); font-weight: 500; cursor: pointer; border: none; background: none; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.75rem; }
+  .tag { padding: 0.32rem 0.95rem; border-radius: 50px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border-med); background: transparent; color: var(--medium-brown); transition: all 0.18s; font-family: 'DM Sans', sans-serif; }
+  .tag:hover, .tag.active { background: var(--terracotta); color: white; border-color: var(--terracotta); }
+  .sub-tabs { display: flex; gap: 0.2rem; border-bottom: 1.5px solid var(--border); margin-bottom: 1.5rem; }
+  .sub-tab { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; color: var(--muted); padding: 0.55rem 0.9rem; cursor: pointer; position: relative; transition: color 0.18s; }
+  .sub-tab::after { content: ''; position: absolute; bottom: -1.5px; left: 0; right: 0; height: 2px; background: var(--terracotta); transform: scaleX(0); transition: transform 0.2s; border-radius: 2px; }
+  .sub-tab.active { color: var(--charcoal); font-weight: 600; }
+  .sub-tab.active::after { transform: scaleX(1); }
+  .btn-primary { background: var(--terracotta); border: none; color: white; padding: 0.5rem 1.15rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--terracotta-light); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border-med); color: var(--charcoal); padding: 0.5rem 1.15rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.18s; }
+  .btn-outline:hover { border-color: var(--terracotta); color: var(--terracotta); }
+  .divider { height: 1px; background: var(--border); }
+  .fab { position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%; background: var(--terracotta); border: none; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(196,98,45,0.4); display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; z-index: 50; }
+  .fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(196,98,45,0.5); }
+
+  /* COLOR HELPERS */
+  .bg-terra { background: #C4622D; } .bg-sage { background: #7A9E7E; } .bg-indigo { background: #4A5899; }
+  .bg-gold { background: #C9933A; } .bg-teal { background: #3D8E8E; } .bg-plum { background: #6B4E71; }
+  .cover-terra { background: linear-gradient(135deg,#C4622D,#E8825A); }
+  .cover-sage { background: linear-gradient(135deg,#7A9E7E,#A8C5AB); }
+  .cover-indigo { background: linear-gradient(135deg,#4A5899,#7B86C4); }
+  .cover-gold { background: linear-gradient(135deg,#C9933A,#E8C070); }
+  .cover-plum { background: linear-gradient(135deg,#6B4E71,#9E7DA5); }
+
+  /* ── HERO ── */
+  .hero { background: var(--charcoal); color: var(--cream); padding: 3.5rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content:''; position:absolute; top:-60px; right:-60px; width:300px; height:300px; border-radius:50%; background:var(--terracotta); opacity:0.13; }
+  .hero::after { content:''; position:absolute; bottom:-80px; left:-40px; width:240px; height:240px; border-radius:50%; background:var(--gold); opacity:0.09; }
+  .hero-eyebrow { font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--terracotta-light); margin-bottom:0.85rem; font-weight:500; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4.5vw,3.2rem); font-weight:900; line-height:1.1; margin-bottom:1.1rem; position:relative; z-index:1; }
+  .hero h1 em { color:var(--terracotta-light); font-style:normal; }
+  .hero p { font-size:1rem; color:var(--sand); max-width:500px; margin:0 auto 1.8rem; line-height:1.7; position:relative; z-index:1; }
+  .search-bar { display:flex; max-width:540px; margin:0 auto; background:white; border-radius:50px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.2); position:relative; z-index:1; }
+  .search-bar input { flex:1; border:none; outline:none; padding:0.8rem 1.4rem; font-family:'DM Sans',sans-serif; font-size:0.92rem; color:var(--charcoal); }
+  .search-bar select { border:none; border-left:1px solid var(--border); outline:none; padding:0.8rem 0.9rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:var(--medium-brown); background:transparent; cursor:pointer; }
+  .search-bar button { background:var(--terracotta); border:none; color:white; padding:0.8rem 1.4rem; font-family:'DM Sans',sans-serif; font-weight:600; font-size:0.88rem; cursor:pointer; transition:background 0.2s; }
+  .search-bar button:hover { background:var(--terracotta-light); }
+
+  /* ── CREATOR CARDS ── */
+  .creator-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.1rem; }
+  .creator-card { background:white; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; }
+  .creator-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+  .creator-cover { height:110px; position:relative; display:flex; align-items:flex-end; padding:0.65rem; }
+  .creator-discipline-badge { font-size:0.68rem; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; padding:0.22rem 0.55rem; border-radius:50px; background:rgba(255,255,255,0.92); color:var(--charcoal); }
+  .creator-body { padding:0.65rem 0.9rem 0.9rem; }
+  .creator-avatar-wrap { margin-top:-22px; margin-bottom:0.5rem; }
+  .creator-avatar { width:44px; height:44px; border-radius:50%; border:3px solid white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; color:white; }
+  .creator-name { font-size:0.92rem; font-weight:600; color:var(--charcoal); margin-bottom:0.12rem; }
+  .creator-location { font-size:0.74rem; color:var(--muted); margin-bottom:0.55rem; }
+  .connect-btn { width:100%; background:var(--terracotta-pale); border:1.5px solid var(--terracotta); color:var(--terracotta); padding:0.4rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .connect-btn:hover, .connect-btn.connected { background:var(--terracotta); color:white; }
+
+  /* ── MARKETPLACE ── */
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1.1rem; }
+  .product-card { background:white; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; }
+  .product-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .product-image { height:170px; position:relative; display:flex; align-items:center; justify-content:center; }
+  .product-type-badge { position:absolute; top:0.65rem; left:0.65rem; font-size:0.66rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:0.18rem 0.55rem; border-radius:50px; background:white; color:var(--medium-brown); }
+  .product-body { padding:0.9rem; }
+  .product-title { font-size:0.92rem; font-weight:600; margin-bottom:0.22rem; color:var(--charcoal); }
+  .product-seller { font-size:0.75rem; color:var(--muted); margin-bottom:0.7rem; }
+  .product-footer { display:flex; align-items:center; justify-content:space-between; }
+  .product-price { font-size:1rem; font-weight:700; color:var(--terracotta); }
+  .buy-btn { background:var(--charcoal); color:white; border:none; padding:0.38rem 0.9rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; transition:background 0.2s; }
+  .buy-btn:hover { background:var(--terracotta); }
+
+  /* ── COLLAB ── */
+  .collab-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.1rem; }
+  .collab-card { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:1.15rem; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; }
+  .collab-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .collab-tag { display:inline-block; font-size:0.68rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:0.22rem 0.65rem; border-radius:50px; margin-bottom:0.7rem; }
+  .tag-paid { background:#E8F5E9; color:#2E7D32; } .tag-volunteer { background:#FFF3E0; color:#E65100; } .tag-trade { background:#E8EAF6; color:#283593; }
+  .collab-title { font-size:0.97rem; font-weight:600; color:var(--charcoal); margin-bottom:0.35rem; font-family:'Playfair Display',serif; }
+  .collab-desc { font-size:0.82rem; color:var(--medium-brown); line-height:1.6; margin-bottom:0.9rem; }
+  .collab-meta { display:flex; gap:0.9rem; font-size:0.75rem; color:var(--muted); margin-bottom:0.9rem; flex-wrap:wrap; }
+  .collab-skills { display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:0.9rem; }
+  .skill-tag { font-size:0.7rem; padding:0.18rem 0.55rem; background:var(--cream); border-radius:50px; color:var(--medium-brown); font-weight:500; }
+  .apply-btn { width:100%; background:var(--terracotta); border:none; color:white; padding:0.55rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; transition:background 0.2s; }
+  .apply-btn:hover { background:var(--terracotta-light); }
+
+  /* ── NETWORK ── */
+  .network-section { padding:1.5rem 2rem; max-width:1000px; margin:0 auto; }
+  .network-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+  .network-item { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:0.75rem 1rem; display:flex; align-items:center; gap:0.75rem; transition:box-shadow 0.2s; }
+  .network-item:hover { box-shadow:var(--shadow); }
+  .network-avatar { width:42px; height:42px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; color:white; }
+  .network-info { flex:1; min-width:0; }
+  .network-name { font-size:0.88rem; font-weight:600; color:var(--charcoal); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .network-role { font-size:0.73rem; color:var(--muted); margin-bottom:0.18rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .network-mutuals { font-size:0.7rem; color:var(--terracotta); }
+  .chat-btn { width:32px; height:32px; border-radius:50%; background:var(--cream); border:1.5px solid var(--border-med); color:var(--medium-brown); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.18s; flex-shrink:0; }
+  .chat-btn:hover { background:var(--terracotta-pale); border-color:var(--terracotta); color:var(--terracotta); }
+  .chat-btn svg { width:14px; height:14px; }
+
+  /* ── RESOURCES ── */
+  .resource-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1.1rem; }
+  .resource-card { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:1.4rem; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; }
+  .resource-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .resource-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.25rem; margin-bottom:0.8rem; }
+  .resource-cat { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.35rem; }
+  .resource-title { font-size:0.97rem; font-weight:600; color:var(--charcoal); margin-bottom:0.35rem; font-family:'Playfair Display',serif; }
+  .resource-desc { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.9rem; }
+  .resource-link { font-size:0.8rem; font-weight:600; color:var(--terracotta); cursor:pointer; }
+
+  /* ── PROFILE ── */
+  .profile-hero { background:var(--charcoal); height:170px; position:relative; }
+  .profile-container { max-width:900px; margin:0 auto; padding:0 2rem 2rem; }
+  .profile-top { display:flex; align-items:flex-end; justify-content:space-between; margin-top:-48px; margin-bottom:1.3rem; flex-wrap:wrap; gap:1rem; }
+  .profile-avatar-lg { width:96px; height:96px; border-radius:50%; border:4px solid white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:2rem; color:white; background:var(--terracotta); }
+  .profile-actions { display:flex; gap:0.65rem; flex-wrap:wrap; }
+  .profile-name { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700; margin-bottom:0.18rem; }
+  .profile-discipline { font-size:0.85rem; color:var(--terracotta); font-weight:600; margin-bottom:0.35rem; text-transform:uppercase; letter-spacing:0.06em; }
+  .profile-location-line { font-size:0.85rem; color:var(--muted); margin-bottom:0.9rem; }
+  .profile-bio { font-size:0.92rem; color:var(--medium-brown); line-height:1.7; max-width:580px; margin-bottom:1.15rem; }
+  .stat-row { display:flex; gap:2rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+  .stat-item { text-align:center; }
+  .stat-num { font-size:1.25rem; font-weight:700; color:var(--charcoal); }
+  .stat-label { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .portfolio-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:0.65rem; }
+  .portfolio-item { border-radius:var(--radius-sm); overflow:hidden; aspect-ratio:1; cursor:pointer; position:relative; transition:transform 0.2s; }
+  .portfolio-item:hover { transform:scale(1.02); }
+  .portfolio-item-overlay { position:absolute; inset:0; background:rgba(30,26,23,0); display:flex; align-items:center; justify-content:center; transition:background 0.2s; color:white; font-size:0.82rem; font-weight:600; }
+  .portfolio-item:hover .portfolio-item-overlay { background:rgba(30,26,23,0.45); }
+
+  /* ════════════════════════════════
+     COMMUNITY TIMELINE
+  ════════════════════════════════ */
+  .timeline-layout {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Compose box */
+  .compose-box {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .compose-top {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .compose-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; color: white;
+  }
+
+  .compose-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: var(--charcoal);
+    background: transparent;
+    resize: none;
+    line-height: 1.6;
+    min-height: 52px;
+  }
+
+  .compose-input::placeholder { color: var(--muted); }
+
+  .compose-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .compose-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .compose-action-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.88rem;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .compose-action-btn:hover { background: var(--cream); color: var(--charcoal); }
+
+  /* Post cards */
+  .post-feed { display: flex; flex-direction: column; gap: 1rem; }
+
+  .post-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .post-card:hover { box-shadow: var(--shadow); }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem 0.6rem;
+  }
+
+  .post-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: white;
+  }
+
+  .post-meta { flex: 1; }
+  .post-author { font-size: 0.9rem; font-weight: 600; color: var(--charcoal); }
+  .post-role { font-size: 0.75rem; color: var(--muted); }
+
+  .post-time {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .post-body {
+    padding: 0 1.1rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--medium-brown);
+    line-height: 1.7;
+  }
+
+  .post-body strong {
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  /* Post media */
+  .post-media {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Multi-image grid */
+  .post-media-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 0.25rem;
+  }
+
+  .post-media-grid .media-cell {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+  }
+
+  /* Post tags */
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0 1.1rem 0.75rem;
+  }
+
+  .post-tag {
+    font-size: 0.75rem;
+    color: var(--terracotta);
+    font-weight: 500;
+  }
+
+  /* Post actions */
+  .post-actions {
+    display: flex;
+    border-top: 1px solid var(--border);
+    padding: 0.1rem 0.5rem;
+  }
+
+  .post-action {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.18s;
+    border: none;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  .post-action:hover { background: var(--cream); color: var(--charcoal); }
+  .post-action.liked { color: var(--terracotta); }
+
+  /* "Milestone" post type */
+  .post-milestone {
+    background: linear-gradient(135deg, var(--charcoal), #3D2E28);
+    color: white;
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    margin-bottom: 0;
+  }
+
+  .milestone-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .milestone-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    color: white;
+  }
+
+  .milestone-sub {
+    font-size: 0.82rem;
+    color: var(--sand);
+    line-height: 1.6;
+  }
+
+  .milestone-author {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Sidebar */
+  .timeline-sidebar { display: flex; flex-direction: column; gap: 1.1rem; }
+
+  .sidebar-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.1rem;
+  }
+
+  .sidebar-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .trending-tag-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .trending-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .trending-item:last-child { border-bottom: none; }
+
+  .trending-name { font-size: 0.85rem; font-weight: 500; color: var(--charcoal); }
+  .trending-count { font-size: 0.75rem; color: var(--muted); }
+
+  .suggest-list { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .suggest-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .suggest-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700; color: white;
+  }
+
+  .suggest-info { flex: 1; }
+  .suggest-name { font-size: 0.83rem; font-weight: 600; color: var(--charcoal); }
+  .suggest-role { font-size: 0.72rem; color: var(--muted); }
+
+  .follow-btn {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--terracotta);
+    background: var(--terracotta-pale);
+    border: 1.5px solid var(--terracotta);
+    padding: 0.25rem 0.65rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .follow-btn:hover { background: var(--terracotta); color: white; }
+
+  /* ════════════════════════════════
+     EVENTS PAGE
+  ════════════════════════════════ */
+  .events-layout {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Featured event banner */
+  .event-featured {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    position: relative;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.75rem;
+    background: linear-gradient(135deg, #1E1A17 40%, #4A2010);
+  }
+
+  .event-featured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(30,26,23,0.92) 0%, rgba(30,26,23,0.2) 100%);
+    z-index: 1;
+  }
+
+  .event-featured-bg {
+    position: absolute;
+    inset: 0;
+    font-size: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.18;
+    z-index: 0;
+  }
+
+  .event-featured-content { position: relative; z-index: 2; }
+
+  .event-featured-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 50px;
+    background: var(--terracotta);
+    color: white;
+    margin-bottom: 0.75rem;
+  }
+
+  .event-featured-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 0.4rem;
+    line-height: 1.15;
+  }
+
+  .event-featured-meta {
+    font-size: 0.82rem;
+    color: var(--sand);
+    margin-bottom: 1.1rem;
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .event-featured-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .btn-white {
+    background: white;
+    border: none;
+    color: var(--charcoal);
+    padding: 0.55rem 1.25rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.18s;
+  }
+
+  .btn-white:hover { opacity: 0.88; }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: white;
+    padding: 0.55rem 1.25rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+
+  .btn-ghost:hover { background: rgba(255,255,255,0.2); }
+
+  /* Event list */
+  .event-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .event-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex;
+    gap: 0;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .event-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+  .event-date-block {
+    width: 70px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    border-right: 1px solid var(--border);
+    background: var(--cream);
+  }
+
+  .event-month {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--terracotta);
+  }
+
+  .event-day {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--charcoal);
+    line-height: 1;
+  }
+
+  .event-dow {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .event-info {
+    flex: 1;
+    padding: 0.9rem 1.1rem;
+  }
+
+  .event-type-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    padding: 0.18rem 0.55rem;
+    border-radius: 50px;
+    margin-bottom: 0.45rem;
+  }
+
+  .type-exhibit { background: #E8EAF6; color: #283593; }
+  .type-workshop { background: #E8F5E9; color: #2E7D32; }
+  .type-popup { background: #FFF3E0; color: #E65100; }
+  .type-networking { background: #FCE4EC; color: #880E4F; }
+  .type-panel { background: var(--terracotta-pale); color: var(--terracotta); }
+  .type-market { background: #F3E5F5; color: #6A1B9A; }
+
+  .event-title {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.3rem;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .event-details {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.55rem;
+  }
+
+  .event-attendees {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .attendee-avatars {
+    display: flex;
+  }
+
+  .attendee-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -6px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .attendee-dot:first-child { margin-left: 0; }
+
+  .attendee-count {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .event-rsvp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0.9rem 1rem;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .rsvp-btn {
+    background: var(--terracotta);
+    border: none;
+    color: white;
+    padding: 0.45rem 1.1rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+    white-space: nowrap;
+  }
+
+  .rsvp-btn:hover { background: var(--terracotta-light); }
+  .rsvp-btn.rsvped { background: var(--sage); }
+
+  .event-price {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-align: right;
+  }
+
+  .event-price.free { color: var(--sage); }
+
+  /* Events sidebar */
+  .events-calendar {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .cal-month-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--charcoal);
+  }
+
+  .cal-nav {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+
+  .cal-nav:hover { color: var(--terracotta); }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .cal-day-label {
+    text-align: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0;
+  }
+
+  .cal-day {
+    text-align: center;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--medium-brown);
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .cal-day:hover { background: var(--cream); }
+
+  .cal-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--terracotta);
+  }
+
+  .cal-day.selected {
+    background: var(--terracotta);
+    color: white;
+    font-weight: 600;
+  }
+
+  .cal-day.selected::after { background: white; }
+  .cal-day.today { font-weight: 700; color: var(--terracotta); }
+  .cal-day.faded { color: var(--sand); }
+
+  .nearby-list { display: flex; flex-direction: column; gap: 0.65rem; }
+
+  .nearby-item {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .nearby-item:last-child { border-bottom: none; }
+  .nearby-item:hover { opacity: 0.75; }
+
+  .nearby-dot {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+
+  .nearby-title { font-size: 0.82rem; font-weight: 600; color: var(--charcoal); margin-bottom: 0.15rem; }
+  .nearby-meta { font-size: 0.72rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">KIN<span>.</span></div>
+  <div class="nav-links">
+    <button class="nav-btn" onclick="showPage('discover')">Discover</button>
+    <button class="nav-btn" onclick="showPage('timeline')">Community</button>
+    <button class="nav-btn" onclick="showPage('events')">Events</button>
+    <button class="nav-btn" onclick="showPage('marketplace')">Marketplace</button>
+    <button class="nav-btn" onclick="showPage('collab')">Collaborate</button>
+    <button class="nav-btn" onclick="showPage('network')">Network</button>
+    <button class="nav-btn" onclick="showPage('resources')">Resources</button>
+  </div>
+  <div class="nav-right">
+    <button class="avatar-sm" onclick="showPage('profile')">JA</button>
+  </div>
+</nav>
+
+<!-- ═══ DISCOVER ═══ -->
+<div class="page active" id="page-discover">
+  <div class="hero">
+    <div class="hero-eyebrow">Welcome to KIN</div>
+    <h1>A home for <em>BIPOC creators</em><br/>to connect & thrive</h1>
+    <p>Discover photographers, designers, sculptors, painters, and more — searchable by city and discipline.</p>
+    <div class="search-bar">
+      <input type="text" placeholder="Search creators, disciplines, keywords..." />
+      <select><option>All Cities</option><option>Los Angeles</option><option>New York</option><option>Atlanta</option><option>Chicago</option><option>Houston</option><option>Miami</option><option>Oakland</option></select>
+      <button>Search</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="tag-row" id="discipline-tags">
+      <button class="tag active" onclick="filterTag(this)">All</button>
+      <button class="tag" onclick="filterTag(this)">Photography</button>
+      <button class="tag" onclick="filterTag(this)">Graphic Design</button>
+      <button class="tag" onclick="filterTag(this)">Painting</button>
+      <button class="tag" onclick="filterTag(this)">Sculpture</button>
+      <button class="tag" onclick="filterTag(this)">Clothing & Fashion</button>
+      <button class="tag" onclick="filterTag(this)">Music</button>
+      <button class="tag" onclick="filterTag(this)">Film</button>
+      <button class="tag" onclick="filterTag(this)">Writing</button>
+      <button class="tag" onclick="filterTag(this)">Murals</button>
+    </div>
+    <div class="section-header">
+      <div class="section-title">Featured Creators</div>
+      <button class="see-all">See all →</button>
+    </div>
+    <div class="creator-grid">
+      <div class="creator-card" onclick="showPage('profile')"><div class="creator-cover cover-terra"><span class="creator-discipline-badge">Photography</span></div><div class="creator-body"><div class="creator-avatar-wrap"><div class="creator-avatar bg-terra">RM</div></div><div class="creator-name">Rania Mousa</div><div class="creator-location">📍 Los Angeles, CA</div><button class="connect-btn" onclick="toggleConnect(event,this)">+ Connect</button></div></div>
+      <div class="creator-card"><div class="creator-cover cover-indigo"><span class="creator-discipline-badge">Graphic Design</span></div><div class="creator-body"><div class="creator-avatar-wrap"><div class="creator-avatar bg-indigo">KT</div></div><div class="creator-name">Kofi Twumasi</div><div class="creator-location">📍 Atlanta, GA</div><button class="connect-btn" onclick="toggleConnect(event,this)">+ Connect</button></div></div>
+      <div class="creator-card"><div class="creator-cover cover-sage"><span class="creator-discipline-badge">Clothing Brand</span></div><div class="creator-body"><div class="creator-avatar-wrap"><div class="creator-avatar bg-sage">LV</div></div><div class="creator-name">Luz Vargas</div><div class="creator-location">📍 Miami, FL</div><button class="connect-btn" onclick="toggleConnect(event,this)">+ Connect</button></div></div>
+      <div class="creator-card"><div class="creator-cover cover-gold"><span class="creator-discipline-badge">Sculpture</span></div><div class="creator-body"><div class="creator-avatar-wrap"><div class="creator-avatar bg-gold">DN</div></div><div class="creator-name">Deja Nwosu</div><div class="creator-location">📍 Chicago, IL</div><button class="connect-btn" onclick="toggleConnect(event,this)">+ Connect</button></div></div>
+      <div class="creator-card"><div class="creator-cover cover-plum"><span class="creator-discipline-badge">Mural Art</span></div><div class="creator-body"><div class="creator-avatar-wrap"><div class="creator-avatar bg-plum">MR</div></div><div class="creator-name">Marcus Reyes</div><div class="creator-location">📍 Houston, TX</div><button class="connect-btn" onclick="toggleConnect(event,this)">+ Connect</button></div></div>
+      <div class="creator-card"><div class="creator-cover" style="background:linear-gradient(135deg,#3D8E8E,#6FC5C5)"><span class="creator-discipline-badge">Film</span></div><div class="creator-body"><div class="creator-avatar-wrap"><div class="creator-avatar bg-teal">AO</div></div><div class="creator-name">Amara Osei</div><div class="creator-location">📍 Oakland, CA</div><button class="connect-btn" onclick="toggleConnect(event,this)">+ Connect</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMUNITY TIMELINE ═══ -->
+<div class="page" id="page-timeline">
+  <div class="timeline-layout">
+    <div>
+      <!-- Compose -->
+      <div class="compose-box">
+        <div class="compose-top">
+          <div class="compose-avatar">JA</div>
+          <textarea class="compose-input" placeholder="Share your work, a win, or what you're working on..."></textarea>
+        </div>
+        <div class="compose-footer">
+          <div class="compose-actions">
+            <button class="compose-action-btn">📷 Photo</button>
+            <button class="compose-action-btn">🎥 Video</button>
+            <button class="compose-action-btn">🔗 Link</button>
+            <button class="compose-action-btn">🎨 Artwork</button>
+          </div>
+          <button class="btn-primary" style="font-size:0.82rem;padding:0.45rem 1.1rem;">Post</button>
+        </div>
+      </div>
+
+      <!-- Feed filters -->
+      <div class="sub-tabs" style="margin-bottom:1.25rem;">
+        <button class="sub-tab active" onclick="switchSubTab(this)">For You</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Network</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">City Feed</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Trending</button>
+      </div>
+
+      <div class="post-feed">
+
+        <!-- Milestone post -->
+        <div class="post-card">
+          <div class="post-milestone">
+            <div class="milestone-label">🏆 Milestone</div>
+            <div class="milestone-title">"Roots & Rising" exhibit sold out in 48 hours.</div>
+            <div class="milestone-sub">After 2 years of shooting this portrait series in community centers across LA, I can't believe this moment is real. Thank you KIN for the platform and the connections that made this happen.</div>
+            <div class="milestone-author">
+              <div class="post-avatar bg-terra" style="width:32px;height:32px;font-size:0.72rem;">RM</div>
+              <div>
+                <div style="font-size:0.82rem;font-weight:600;color:white;">Rania Mousa</div>
+                <div style="font-size:0.72rem;color:var(--sand);">Photographer · Los Angeles · 2h ago</div>
+              </div>
+            </div>
+          </div>
+          <div class="post-actions">
+            <button class="post-action" onclick="likePost(this)">♡ 142</button>
+            <button class="post-action">💬 28 comments</button>
+            <button class="post-action">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Image post -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar bg-indigo">KT</div>
+            <div class="post-meta">
+              <div class="post-author">Kofi Twumasi</div>
+              <div class="post-role">Graphic Designer · Atlanta, GA</div>
+            </div>
+            <div class="post-time">4h ago</div>
+          </div>
+          <div class="post-body">New brand identity I designed for a Black-owned restaurant group in Atlanta. It was important to them that the visual language felt rooted in West African textile patterns. This is the work that fills my soul. 🖤</div>
+          <div class="post-media-grid">
+            <div class="media-cell cover-indigo" style="height:160px;">🎨</div>
+            <div class="media-cell cover-gold" style="height:160px;">✏️</div>
+          </div>
+          <div class="post-tags">
+            <span class="post-tag">#GraphicDesign</span>
+            <span class="post-tag">#BrandIdentity</span>
+            <span class="post-tag">#BlackOwned</span>
+            <span class="post-tag">#AfricanArt</span>
+          </div>
+          <div class="post-actions">
+            <button class="post-action" onclick="likePost(this)">♡ 89</button>
+            <button class="post-action">💬 14 comments</button>
+            <button class="post-action">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Opportunity post -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar bg-sage">LV</div>
+            <div class="post-meta">
+              <div class="post-author">Luz Vargas</div>
+              <div class="post-role">Fashion Designer · Miami, FL</div>
+            </div>
+            <div class="post-time">6h ago</div>
+          </div>
+          <div class="post-body">
+            <strong>Looking for a photographer in Miami!</strong> I'm dropping my SS26 lookbook next month and need someone who understands brown skin + natural light. Budget is real. DM me your portfolio or check the Collaboration Board for the full post. Let's keep the money in the community. 🌿
+          </div>
+          <div class="post-tags">
+            <span class="post-tag">#HiringNow</span>
+            <span class="post-tag">#MiamiFashion</span>
+            <span class="post-tag">#KINOpportunity</span>
+          </div>
+          <div class="post-actions">
+            <button class="post-action" onclick="likePost(this)">♡ 57</button>
+            <button class="post-action">💬 31 comments</button>
+            <button class="post-action">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Single image post -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar bg-plum">MR</div>
+            <div class="post-meta">
+              <div class="post-author">Marcus Reyes</div>
+              <div class="post-role">Mural Artist · Houston, TX</div>
+            </div>
+            <div class="post-time">Yesterday</div>
+          </div>
+          <div class="post-body">Day 3 of the South Houston mural. The wall is finally speaking. This one's for the elders. 🎨</div>
+          <div class="post-media cover-plum">🖌️</div>
+          <div class="post-tags">
+            <span class="post-tag">#MuralArt</span>
+            <span class="post-tag">#HoustonCreatives</span>
+            <span class="post-tag">#PublicArt</span>
+            <span class="post-tag">#WIP</span>
+          </div>
+          <div class="post-actions">
+            <button class="post-action" onclick="likePost(this)">♡ 214</button>
+            <button class="post-action">💬 47 comments</button>
+            <button class="post-action">↗ Share</button>
+          </div>
+        </div>
+
+        <!-- Resource share post -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar bg-teal">AO</div>
+            <div class="post-meta">
+              <div class="post-author">Amara Osei</div>
+              <div class="post-role">Filmmaker · Oakland, CA</div>
+            </div>
+            <div class="post-time">Yesterday</div>
+          </div>
+          <div class="post-body">
+            PSA: The <strong>Sundance Indigenous & BIPOC Filmmakers Grant</strong> deadline is July 31st. $10k–$25k available. I applied last year and got it — happy to review your application. Drop a comment or DM. We move together. 🎬
+          </div>
+          <div class="post-tags">
+            <span class="post-tag">#FilmGrant</span>
+            <span class="post-tag">#BIPOC</span>
+            <span class="post-tag">#ResourceShare</span>
+          </div>
+          <div class="post-actions">
+            <button class="post-action" onclick="likePost(this)">♡ 178</button>
+            <button class="post-action">💬 62 comments</button>
+            <button class="post-action">↗ Share</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="timeline-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Trending in KIN</div>
+        <div class="trending-tag-row">
+          <div class="trending-item"><span class="trending-name">#BlackArtMatters</span><span class="trending-count">2.4k posts</span></div>
+          <div class="trending-item"><span class="trending-name">#KINOpportunity</span><span class="trending-count">891 posts</span></div>
+          <div class="trending-item"><span class="trending-name">#MiamiFashionWeek</span><span class="trending-count">634 posts</span></div>
+          <div class="trending-item"><span class="trending-name">#ResourceShare</span><span class="trending-count">508 posts</span></div>
+          <div class="trending-item"><span class="trending-name">#ATLCreatives</span><span class="trending-count">412 posts</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Suggested Connections</div>
+        <div class="suggest-list">
+          <div class="suggest-item"><div class="suggest-avatar bg-gold">DN</div><div class="suggest-info"><div class="suggest-name">Deja Nwosu</div><div class="suggest-role">Sculptor · Chicago</div></div><button class="follow-btn">+ Add</button></div>
+          <div class="suggest-item"><div class="suggest-avatar bg-terra">PR</div><div class="suggest-info"><div class="suggest-name">Priya Rao</div><div class="suggest-role">Illustrator · NYC</div></div><button class="follow-btn">+ Add</button></div>
+          <div class="suggest-item"><div class="suggest-avatar bg-plum">JW</div><div class="suggest-info"><div class="suggest-name">Jabari Washington</div><div class="suggest-role">Musician · Atlanta</div></div><button class="follow-btn">+ Add</button></div>
+          <div class="suggest-item"><div class="suggest-avatar bg-teal">SO</div><div class="suggest-info"><div class="suggest-name">Sofia Ortega</div><div class="suggest-role">Ceramicist · LA</div></div><button class="follow-btn">+ Add</button></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card" style="background:var(--charcoal);border-color:transparent;">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--terracotta-light);margin-bottom:0.6rem;">Upcoming near you</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:white;margin-bottom:0.3rem;">KIN LA Meetup — April 5</div>
+        <div style="font-size:0.78rem;color:var(--sand);margin-bottom:0.9rem;line-height:1.6;">Networking + portfolio showcase at The Broad, DTLA. 60+ creators attending.</div>
+        <button class="btn-primary" style="width:100%;font-size:0.8rem;">RSVP Free →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EVENTS ═══ -->
+<div class="page" id="page-events">
+  <div class="events-layout">
+    <div>
+      <!-- Featured event -->
+      <div class="event-featured">
+        <div class="event-featured-bg">🎨</div>
+        <div class="event-featured-content">
+          <span class="event-featured-badge">✦ Featured Event</span>
+          <div class="event-featured-title">KIN Creator Summit 2025<br/>— Los Angeles</div>
+          <div class="event-featured-meta">
+            <span>📅 April 19–20, 2025</span>
+            <span>📍 The Broad, DTLA</span>
+            <span>👥 500+ creators expected</span>
+            <span>🎟 Free – $45</span>
+          </div>
+          <div class="event-featured-actions">
+            <button class="btn-white">RSVP Now</button>
+            <button class="btn-ghost">Learn More</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="switchSubTab(this)">All Events</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Exhibitions</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Workshops</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Networking</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Markets</button>
+        <button class="sub-tab" onclick="switchSubTab(this)">Online</button>
+      </div>
+
+      <div class="tag-row">
+        <button class="tag active" onclick="filterTag(this)">All Cities</button>
+        <button class="tag" onclick="filterTag(this)">Los Angeles</button>
+        <button class="tag" onclick="filterTag(this)">Atlanta</button>
+        <button class="tag" onclick="filterTag(this)">New York</button>
+        <button class="tag" onclick="filterTag(this)">Miami</button>
+        <button class="tag" onclick="filterTag(this)">Chicago</button>
+        <button class="tag" onclick="filterTag(this)">Online</button>
+      </div>
+
+      <div class="event-list">
+
+        <div class="event-card">
+          <div class="event-date-block"><div class="event-month">Apr</div><div class="event-day">5</div><div class="event-dow">Sat</div></div>
+          <div class="event-info">
+            <span class="event-type-badge type-networking">Networking</span>
+            <div class="event-title">KIN LA Meetup — Portfolio Night</div>
+            <div class="event-details"><span>📍 The Broad, DTLA</span><span>🕖 6:00 – 9:00 PM</span></div>
+            <div class="event-attendees"><div class="attendee-avatars"><div class="attendee-dot bg-terra">RM</div><div class="attendee-dot bg-indigo">KT</div><div class="attendee-dot bg-sage">LV</div></div><span class="attendee-count">+ 47 attending</span></div>
+          </div>
+          <div class="event-rsvp"><button class="rsvp-btn" onclick="toggleRsvp(this)">RSVP</button><div class="event-price free">Free</div></div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block"><div class="event-month">Apr</div><div class="event-day">12</div><div class="event-dow">Sat</div></div>
+          <div class="event-info">
+            <span class="event-type-badge type-workshop">Workshop</span>
+            <div class="event-title">Pricing Your Art: Know Your Worth</div>
+            <div class="event-details"><span>📍 Spelman College, Atlanta</span><span>🕙 10 AM – 1 PM</span></div>
+            <div class="event-attendees"><div class="attendee-avatars"><div class="attendee-dot bg-gold">DN</div><div class="attendee-dot bg-teal">AO</div></div><span class="attendee-count">+ 23 attending</span></div>
+          </div>
+          <div class="event-rsvp"><button class="rsvp-btn" onclick="toggleRsvp(this)">RSVP</button><div class="event-price">$15</div></div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block"><div class="event-month">Apr</div><div class="event-day">19</div><div class="event-dow">Sat</div></div>
+          <div class="event-info">
+            <span class="event-type-badge type-exhibit">Exhibition</span>
+            <div class="event-title">KIN Creator Summit 2025 — Day 1</div>
+            <div class="event-details"><span>📍 The Broad, Los Angeles</span><span>🕙 10 AM – 7 PM</span></div>
+            <div class="event-attendees"><div class="attendee-avatars"><div class="attendee-dot bg-terra">RM</div><div class="attendee-dot bg-plum">MR</div><div class="attendee-dot bg-indigo">KT</div></div><span class="attendee-count">+ 312 attending</span></div>
+          </div>
+          <div class="event-rsvp"><button class="rsvp-btn" onclick="toggleRsvp(this)">RSVP</button><div class="event-price">$25</div></div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block"><div class="event-month">Apr</div><div class="event-day">26</div><div class="event-dow">Sat</div></div>
+          <div class="event-info">
+            <span class="event-type-badge type-market">Market</span>
+            <div class="event-title">KIN Black Arts Market — Miami Edition</div>
+            <div class="event-details"><span>📍 Wynwood Walls, Miami</span><span>🕙 11 AM – 6 PM</span></div>
+            <div class="event-attendees"><div class="attendee-avatars"><div class="attendee-dot bg-sage">LV</div><div class="attendee-dot bg-teal">AO</div></div><span class="attendee-count">+ 88 attending</span></div>
+          </div>
+          <div class="event-rsvp"><button class="rsvp-btn" onclick="toggleRsvp(this)">RSVP</button><div class="event-price free">Free</div></div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block"><div class="event-month">May</div><div class="event-day">3</div><div class="event-dow">Sat</div></div>
+          <div class="event-info">
+            <span class="event-type-badge type-panel">Panel</span>
+            <div class="event-title">From Creator to CEO — Monetizing Your Gift</div>
+            <div class="event-details"><span>📍 Online / Zoom</span><span>🕑 2:00 – 4:00 PM EST</span></div>
+            <div class="event-attendees"><div class="attendee-avatars"><div class="attendee-dot bg-gold">DN</div><div class="attendee-dot bg-terra">RM</div></div><span class="attendee-count">+ 156 attending</span></div>
+          </div>
+          <div class="event-rsvp"><button class="rsvp-btn" onclick="toggleRsvp(this)">RSVP</button><div class="event-price free">Free</div></div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block"><div class="event-month">May</div><div class="event-day">10</div><div class="event-dow">Sat</div></div>
+          <div class="event-info">
+            <span class="event-type-badge type-workshop">Workshop</span>
+            <div class="event-title">Grant Writing for Artists — Intensive</div>
+            <div class="event-details"><span>📍 DuSable Museum, Chicago</span><span>🕙 10 AM – 3 PM</span></div>
+            <div class="event-attendees"><div class="attendee-avatars"><div class="attendee-dot bg-plum">MR</div></div><span class="attendee-count">+ 19 attending</span></div>
+          </div>
+          <div class="event-rsvp"><button class="rsvp-btn" onclick="toggleRsvp(this)">RSVP</button><div class="event-price">$20</div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+      <div class="events-calendar">
+        <div class="cal-header">
+          <button class="cal-nav">‹</button>
+          <div class="cal-month-label">April 2025</div>
+          <button class="cal-nav">›</button>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-day-label">S</div><div class="cal-day-label">M</div><div class="cal-day-label">T</div><div class="cal-day-label">W</div><div class="cal-day-label">T</div><div class="cal-day-label">F</div><div class="cal-day-label">S</div>
+          <div class="cal-day faded">30</div><div class="cal-day faded">31</div><div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day has-event selected">5</div>
+          <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day has-event">12</div>
+          <div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day has-event">19</div>
+          <div class="cal-day has-event">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day today">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day has-event">26</div>
+          <div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day faded">1</div><div class="cal-day faded">2</div><div class="cal-day faded">3</div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Happening This Week</div>
+        <div class="nearby-list">
+          <div class="nearby-item"><div class="nearby-dot" style="background:var(--terracotta-pale);">🎨</div><div><div class="nearby-title">KIN LA Portfolio Night</div><div class="nearby-meta">Apr 5 · The Broad · Free</div></div></div>
+          <div class="nearby-item"><div class="nearby-dot" style="background:#E8EAF6;">🖼️</div><div><div class="nearby-title">Afrofuturism Group Show</div><div class="nearby-meta">Apr 6 · Gallery 9, LA · Free</div></div></div>
+          <div class="nearby-item"><div class="nearby-dot" style="background:#E8F5E9;">💬</div><div><div class="nearby-title">Creator Mindfulness Circle</div><div class="nearby-meta">Apr 8 · Online · Free</div></div></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Host an Event</div>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:0.9rem;">Are you organizing a workshop, pop-up, or show? List it on KIN and reach thousands of creators in your city.</p>
+        <button class="btn-primary" style="width:100%;font-size:0.82rem;">+ List Your Event</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MARKETPLACE ═══ -->
+<div class="page" id="page-marketplace">
+  <div class="section">
+    <div class="section-header"><div class="section-title">Marketplace</div><button class="btn-primary">+ List Item</button></div>
+    <div class="sub-tabs"><button class="sub-tab active" onclick="switchSubTab(this)">All</button><button class="sub-tab" onclick="switchSubTab(this)">Art & Prints</button><button class="sub-tab" onclick="switchSubTab(this)">Fashion</button><button class="sub-tab" onclick="switchSubTab(this)">Services</button><button class="sub-tab" onclick="switchSubTab(this)">Digital</button></div>
+    <div class="product-grid">
+      <div class="product-card"><div class="product-image cover-terra"><span class="product-type-badge">Print</span><div style="font-size:2.8rem;">🎨</div></div><div class="product-body"><div class="product-title">"Roots & Rising" — Limited Print</div><div class="product-seller">by Rania Mousa · Los Angeles</div><div class="product-footer"><div class="product-price">$120</div><button class="buy-btn">Buy Now</button></div></div></div>
+      <div class="product-card"><div class="product-image cover-indigo"><span class="product-type-badge">Fashion</span><div style="font-size:2.8rem;">👕</div></div><div class="product-body"><div class="product-title">Heritage Drop — Hand-Painted Tee</div><div class="product-seller">by Luz Vargas · Miami</div><div class="product-footer"><div class="product-price">$85</div><button class="buy-btn">Buy Now</button></div></div></div>
+      <div class="product-card"><div class="product-image cover-sage"><span class="product-type-badge">Service</span><div style="font-size:2.8rem;">📸</div></div><div class="product-body"><div class="product-title">Brand Photography Session (2hr)</div><div class="product-seller">by Kofi Twumasi · Atlanta</div><div class="product-footer"><div class="product-price">$350</div><button class="buy-btn">Book</button></div></div></div>
+      <div class="product-card"><div class="product-image cover-plum"><span class="product-type-badge">Sculpture</span><div style="font-size:2.8rem;">🗿</div></div><div class="product-body"><div class="product-title">Terracotta Vessel Series No. 3</div><div class="product-seller">by Deja Nwosu · Chicago</div><div class="product-footer"><div class="product-price">$680</div><button class="buy-btn">Buy Now</button></div></div></div>
+      <div class="product-card"><div class="product-image" style="background:linear-gradient(135deg,#3D8E8E,#6FC5C5)"><span class="product-type-badge">Digital</span><div style="font-size:2.8rem;">🎬</div></div><div class="product-body"><div class="product-title">Short Film Editing Package</div><div class="product-seller">by Amara Osei · Oakland</div><div class="product-footer"><div class="product-price">$500</div><button class="buy-btn">Book</button></div></div></div>
+      <div class="product-card"><div class="product-image cover-gold"><span class="product-type-badge">Print</span><div style="font-size:2.8rem;">🖼️</div></div><div class="product-body"><div class="product-title">Ancestors — Giclee Print 24×36</div><div class="product-seller">by Marcus Reyes · Houston</div><div class="product-footer"><div class="product-price">$200</div><button class="buy-btn">Buy Now</button></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COLLAB FILTER STYLES -->
+<style>
+  .collab-filter-bar { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.15rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.75rem; }
+  .collab-search-wrap { position:relative; }
+  .collab-search-icon { position:absolute; left:0.85rem; top:50%; transform:translateY(-50%); font-size:0.9rem; pointer-events:none; }
+  .collab-search-wrap input { width:100%; border:1.5px solid var(--border-med); border-radius:8px; padding:0.6rem 1rem 0.6rem 2.2rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:var(--charcoal); outline:none; transition:border-color 0.18s; }
+  .collab-search-wrap input:focus { border-color:var(--terracotta); }
+  .collab-selects { display:flex; gap:0.6rem; flex-wrap:wrap; }
+  .collab-selects select { border:1.5px solid var(--border-med); border-radius:8px; padding:0.5rem 0.85rem; font-family:'DM Sans',sans-serif; font-size:0.82rem; color:var(--medium-brown); background:var(--warm-white); cursor:pointer; outline:none; transition:border-color 0.18s; }
+  .collab-selects select:focus { border-color:var(--terracotta); }
+  .active-filter-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.85rem; }
+  .active-filter-pill { display:inline-flex; align-items:center; gap:0.35rem; background:var(--terracotta-pale); border:1.5px solid var(--terracotta); color:var(--terracotta); font-size:0.75rem; font-weight:600; padding:0.22rem 0.65rem; border-radius:50px; }
+  .active-filter-pill button { background:none; border:none; color:var(--terracotta); cursor:pointer; font-size:0.9rem; line-height:1; padding:0; margin-left:2px; }
+</style>
+
+<!-- ═══ COLLAB ═══ -->
+<div class="page" id="page-collab">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Collaboration Board</div>
+      <button class="btn-primary">+ Post Opportunity</button>
+    </div>
+
+    <div class="collab-filter-bar">
+      <div class="collab-search-wrap">
+        <span class="collab-search-icon">🔍</span>
+        <input type="text" id="collab-search" placeholder="Search by keyword, skill, or project type..." oninput="filterCollab()" />
+      </div>
+      <div class="collab-selects">
+        <select id="filter-city" onchange="filterCollab()">
+          <option value="">All Cities</option>
+          <option value="los angeles">Los Angeles</option>
+          <option value="atlanta">Atlanta</option>
+          <option value="houston">Houston</option>
+          <option value="chicago">Chicago</option>
+          <option value="miami">Miami</option>
+          <option value="new york">New York</option>
+          <option value="remote">Remote</option>
+        </select>
+        <select id="filter-discipline" onchange="filterCollab()">
+          <option value="">All Disciplines</option>
+          <option value="film">Film</option>
+          <option value="photography">Photography</option>
+          <option value="graphic design">Graphic Design</option>
+          <option value="mural">Mural Art</option>
+          <option value="fashion">Fashion</option>
+          <option value="music">Music</option>
+          <option value="visual art">Visual Art</option>
+          <option value="writing">Writing</option>
+        </select>
+        <select id="filter-comp" onchange="filterCollab()">
+          <option value="">Any Compensation</option>
+          <option value="paid">Paid</option>
+          <option value="trade">Trade</option>
+          <option value="volunteer">Volunteer</option>
+        </select>
+        <select id="filter-sort" onchange="filterCollab()">
+          <option value="recent">Recently Added</option>
+          <option value="popular">Most Applied</option>
+          <option value="deadline">Deadline Soon</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="active-filters" class="active-filter-row"></div>
+    <div id="collab-results-count" style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;"></div>
+
+    <div class="collab-grid" id="collab-grid">
+
+      <div class="collab-card" data-city="los angeles" data-comp="paid" data-discipline="film cinematography costume design" data-date="2" data-popular="34" data-deadline="14" data-keywords="film director cinematographer costume pa production">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-paid">Paid</span><span style="font-size:0.7rem;color:var(--muted);">2 days ago</span></div>
+        <div class="collab-title">Independent Film — "Entre Mundos"</div>
+        <div class="collab-desc">Feature film by a Latina director. Seeking cinematographer, costume designer, and production assistant for a 3-week shoot in East LA.</div>
+        <div class="collab-meta"><span>📍 Los Angeles, CA</span><span>💰 $800–$1,200/wk</span><span>🗓 Starts July 10</span></div>
+        <div class="collab-skills"><span class="skill-tag">Cinematography</span><span class="skill-tag">Costume Design</span><span class="skill-tag">Production</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">34 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+      <div class="collab-card" data-city="atlanta" data-comp="trade" data-discipline="visual art installation music" data-date="4" data-popular="18" data-deadline="60" data-keywords="pop-up exhibition gallery collective visual art dj installation">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-trade">Trade</span><span style="font-size:0.7rem;color:var(--muted);">4 days ago</span></div>
+        <div class="collab-title">Pop-up Exhibition — Collective Show</div>
+        <div class="collab-desc">Curating a multi-discipline pop-up in Atlanta this fall. Looking for 4–6 visual artists, a DJ, and an installation artist. Skills-based trade.</div>
+        <div class="collab-meta"><span>📍 Atlanta, GA</span><span>🎨 Skills Trade</span><span>🗓 September</span></div>
+        <div class="collab-skills"><span class="skill-tag">Visual Art</span><span class="skill-tag">Installation</span><span class="skill-tag">Music / DJ</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">18 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+      <div class="collab-card" data-city="houston" data-comp="paid" data-discipline="graphic design" data-date="1" data-popular="52" data-deadline="7" data-keywords="album cover merch graphic designer brand identity rapper music">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-paid">Paid</span><span style="font-size:0.7rem;color:var(--muted);">1 day ago</span></div>
+        <div class="collab-title">Album Cover & Merch Design</div>
+        <div class="collab-desc">Houston-based rapper releasing debut LP. Need a graphic designer with a bold aesthetic to handle full visual identity — cover, promo, and merch.</div>
+        <div class="collab-meta"><span>📍 Houston or Remote</span><span>💰 $1,500 flat</span><span>🗓 Deadline: June 30</span></div>
+        <div class="collab-skills"><span class="skill-tag">Graphic Design</span><span class="skill-tag">Brand Identity</span><span class="skill-tag">Merch Design</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">52 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+      <div class="collab-card" data-city="chicago" data-comp="volunteer" data-discipline="mural" data-date="6" data-popular="9" data-deadline="45" data-keywords="mural youth community wall nonprofit beautification painting">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-volunteer">Volunteer</span><span style="font-size:0.7rem;color:var(--muted);">6 days ago</span></div>
+        <div class="collab-title">Youth Mural Project — Community Wall</div>
+        <div class="collab-desc">Community arts nonprofit needs mural artists and assistants for a neighborhood beautification project in South Chicago. Great for portfolio.</div>
+        <div class="collab-meta"><span>📍 Chicago, IL</span><span>🤝 Volunteer (Portfolio)</span><span>🗓 August weekends</span></div>
+        <div class="collab-skills"><span class="skill-tag">Mural Art</span><span class="skill-tag">Community Arts</span><span class="skill-tag">Teaching</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">9 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+      <div class="collab-card" data-city="miami" data-comp="paid" data-discipline="photography fashion" data-date="3" data-popular="41" data-deadline="11" data-keywords="fashion lookbook photography stylist makeup beauty streetwear">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-paid">Paid</span><span style="font-size:0.7rem;color:var(--muted);">3 days ago</span></div>
+        <div class="collab-title">Fashion Brand Lookbook Shoot</div>
+        <div class="collab-desc">Black-owned streetwear brand launching Spring/Summer. Needs photographer, stylist, and makeup artist for a 1-day lookbook shoot in Miami.</div>
+        <div class="collab-meta"><span>📍 Miami, FL</span><span>💰 $300–$600/role</span><span>🗓 May 18</span></div>
+        <div class="collab-skills"><span class="skill-tag">Photography</span><span class="skill-tag">Styling</span><span class="skill-tag">Makeup / Beauty</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">41 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+      <div class="collab-card" data-city="remote" data-comp="trade" data-discipline="graphic design" data-date="7" data-popular="23" data-deadline="30" data-keywords="podcast brand identity logo social graphics afro-caribbean">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-trade">Trade</span><span style="font-size:0.7rem;color:var(--muted);">1 week ago</span></div>
+        <div class="collab-title">Podcast Visual Brand Identity</div>
+        <div class="collab-desc">Afro-Caribbean culture podcast growing fast — needs a designer to trade skills. Podcast offers promo, episodes, and social reach in return.</div>
+        <div class="collab-meta"><span>📍 Remote / NYC</span><span>🔄 Skills Trade</span><span>🗓 Flexible</span></div>
+        <div class="collab-skills"><span class="skill-tag">Branding</span><span class="skill-tag">Logo Design</span><span class="skill-tag">Social Graphics</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">23 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+      <div class="collab-card" data-city="new york" data-comp="paid" data-discipline="writing" data-date="0" data-popular="8" data-deadline="21" data-keywords="writing copywriter script spoken word playwright theater nyc">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><span class="collab-tag tag-paid">Paid</span><span style="font-size:0.7rem;color:var(--muted);">Today</span></div>
+        <div class="collab-title">Script & Spoken Word — Live Performance</div>
+        <div class="collab-desc">Brooklyn-based theater collective seeking a writer and spoken word artist for an original 45-min show exploring gentrification and identity.</div>
+        <div class="collab-meta"><span>📍 New York, NY</span><span>💰 $600 stipend</span><span>🗓 Show: Aug 2</span></div>
+        <div class="collab-skills"><span class="skill-tag">Writing</span><span class="skill-tag">Spoken Word</span><span class="skill-tag">Theater</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:0.72rem;color:var(--muted);">8 applicants</span><button class="apply-btn" style="width:auto;padding:0.45rem 1.1rem;">Apply to Collaborate</button></div>
+      </div>
+
+    </div>
+
+    <div id="collab-empty" style="display:none;text-align:center;padding:3.5rem 2rem;color:var(--muted);">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🔍</div>
+      <div style="font-size:1rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">No opportunities found</div>
+      <div style="font-size:0.85rem;line-height:1.6;">Try adjusting your filters or search terms.<br/>New opportunities are posted every day.</div>
+      <button class="btn-outline" style="margin-top:1.25rem;" onclick="clearCollabFilters()">Clear all filters</button>
+    </div>
+
+  </div>
+  <button class="fab" title="Post new opportunity">+</button>
+</div>
+
+<!-- ═══ NETWORK ═══ -->
+<div class="page" id="page-network">
+  <div class="network-section">
+    <div style="margin-bottom:1.4rem;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+      <div><div class="section-title" style="margin-bottom:0.25rem;">Your Network</div><p style="font-size:0.83rem;color:var(--muted);">128 connections · 24 pending requests</p></div>
+      <div class="collab-search-wrap" style="width:240px;"><span class="collab-search-icon">🔍</span><input type="text" placeholder="Search connections..." style="width:100%;border:1.5px solid var(--border-med);border-radius:8px;padding:0.5rem 0.9rem 0.5rem 2.1rem;font-family:DM Sans,sans-serif;font-size:0.82rem;color:var(--charcoal);outline:none;" /></div>
+    </div>
+    <div class="sub-tabs"><button class="sub-tab active" onclick="switchSubTab(this)">Connections</button><button class="sub-tab" onclick="switchSubTab(this)">Suggested</button><button class="sub-tab" onclick="switchSubTab(this)">Pending (24)</button></div>
+    <div class="network-grid">
+      <div class="network-item"><div class="network-avatar bg-terra">RM</div><div class="network-info"><div class="network-name">Rania Mousa</div><div class="network-role">Photographer · Los Angeles, CA</div><div class="network-mutuals">🔗 3 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-indigo">KT</div><div class="network-info"><div class="network-name">Kofi Twumasi</div><div class="network-role">Graphic Designer · Atlanta, GA</div><div class="network-mutuals">🔗 7 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-sage">LV</div><div class="network-info"><div class="network-name">Luz Vargas</div><div class="network-role">Fashion Designer · Miami, FL</div><div class="network-mutuals">🔗 2 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-plum">MR</div><div class="network-info"><div class="network-name">Marcus Reyes</div><div class="network-role">Mural Artist · Houston, TX</div><div class="network-mutuals">🔗 5 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-gold">DN</div><div class="network-info"><div class="network-name">Deja Nwosu</div><div class="network-role">Sculptor · Chicago, IL</div><div class="network-mutuals">🔗 1 mutual connection</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-teal">AO</div><div class="network-info"><div class="network-name">Amara Osei</div><div class="network-role">Filmmaker · Oakland, CA</div><div class="network-mutuals">🔗 4 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-terra" style="background:#8B4513;">PR</div><div class="network-info"><div class="network-name">Priya Rao</div><div class="network-role">Illustrator · New York, NY</div><div class="network-mutuals">🔗 6 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+      <div class="network-item"><div class="network-avatar bg-plum" style="background:#2E6B4F;">JW</div><div class="network-info"><div class="network-name">Jabari Washington</div><div class="network-role">Musician · Atlanta, GA</div><div class="network-mutuals">🔗 2 mutual connections</div></div><button class="chat-btn" title="Message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCES STYLES -->
+<style>
+  .res-layout { max-width:1100px; margin:0 auto; padding:2rem; display:grid; grid-template-columns:220px 1fr; gap:2rem; align-items:start; }
+  .res-sidebar { position:sticky; top:74px; }
+  .res-sidebar-section { margin-bottom:1.5rem; }
+  .res-sidebar-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:0.6rem; padding:0 0.25rem; }
+  .res-cat-btn { display:flex; align-items:center; gap:0.6rem; width:100%; background:none; border:none; font-family:'DM Sans',sans-serif; font-size:0.85rem; color:var(--medium-brown); padding:0.5rem 0.75rem; border-radius:8px; cursor:pointer; transition:all 0.15s; text-align:left; font-weight:500; }
+  .res-cat-btn:hover { background:var(--cream); color:var(--charcoal); }
+  .res-cat-btn.active { background:var(--terracotta-pale); color:var(--terracotta); font-weight:600; }
+  .res-cat-btn .res-cat-icon { font-size:1rem; width:22px; text-align:center; }
+  .res-cat-btn .res-cat-count { margin-left:auto; font-size:0.7rem; background:var(--border); color:var(--muted); padding:0.1rem 0.45rem; border-radius:50px; }
+  .res-cat-btn.active .res-cat-count { background:var(--terracotta); color:white; }
+  .res-area-banner { background:var(--charcoal); border-radius:var(--radius); padding:1rem; margin-top:0.5rem; }
+  .res-area-label { font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--terracotta-light); margin-bottom:0.3rem; }
+  .res-area-city { font-size:0.92rem; font-weight:600; color:white; margin-bottom:0.15rem; }
+  .res-area-sub { font-size:0.72rem; color:var(--sand); line-height:1.5; margin-bottom:0.75rem; }
+  .res-area-btn { width:100%; background:var(--terracotta); border:none; color:white; padding:0.45rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; }
+
+  .res-main-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem; }
+  .res-search-wrap { position:relative; flex:1; max-width:400px; }
+  .res-search-wrap input { width:100%; border:1.5px solid var(--border-med); border-radius:8px; padding:0.58rem 1rem 0.58rem 2.2rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:var(--charcoal); outline:none; transition:border-color 0.18s; }
+  .res-search-wrap input:focus { border-color:var(--terracotta); }
+  .res-search-icon { position:absolute; left:0.75rem; top:50%; transform:translateY(-50%); font-size:0.88rem; pointer-events:none; }
+  .res-results-count { font-size:0.8rem; color:var(--muted); }
+
+  .resource-card { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:1.25rem; cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; }
+  .resource-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .res-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:0.75rem; margin-bottom:0.75rem; }
+  .res-card-icon-wrap { display:flex; align-items:center; gap:0.65rem; }
+  .resource-icon { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+  .res-local-badge { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:0.2rem 0.55rem; border-radius:50px; background:#E8F5E9; color:#2E7D32; white-space:nowrap; }
+  .resource-cat { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.25rem; }
+  .resource-title { font-size:0.95rem; font-weight:600; color:var(--charcoal); margin-bottom:0.3rem; font-family:'Playfair Display',serif; line-height:1.3; }
+  .resource-desc { font-size:0.8rem; color:var(--muted); line-height:1.6; margin-bottom:0.85rem; }
+  .res-card-footer { display:flex; align-items:center; justify-content:space-between; }
+  .resource-link { font-size:0.8rem; font-weight:600; color:var(--terracotta); cursor:pointer; }
+  .res-city-tag { font-size:0.7rem; color:var(--muted); background:var(--cream); padding:0.18rem 0.55rem; border-radius:50px; }
+</style>
+
+<!-- ═══ RESOURCES ═══ -->
+<div class="page" id="page-resources">
+  <div class="res-layout">
+
+    <!-- Sidebar nav -->
+    <div class="res-sidebar">
+      <div class="res-sidebar-section">
+        <div class="res-sidebar-label">Browse by Category</div>
+        <button class="res-cat-btn active" onclick="filterResources('all',this)"><span class="res-cat-icon">✦</span> All Resources <span class="res-cat-count">12</span></button>
+        <button class="res-cat-btn" onclick="filterResources('financial',this)"><span class="res-cat-icon">💰</span> Financial <span class="res-cat-count">3</span></button>
+        <button class="res-cat-btn" onclick="filterResources('grants',this)"><span class="res-cat-icon">🏆</span> Grants <span class="res-cat-count">3</span></button>
+        <button class="res-cat-btn" onclick="filterResources('mental health',this)"><span class="res-cat-icon">💜</span> Mental Health <span class="res-cat-count">2</span></button>
+        <button class="res-cat-btn" onclick="filterResources('legal',this)"><span class="res-cat-icon">⚖️</span> Legal & IP <span class="res-cat-count">2</span></button>
+        <button class="res-cat-btn" onclick="filterResources('business',this)"><span class="res-cat-icon">🌱</span> Business <span class="res-cat-count">2</span></button>
+      </div>
+      <div class="res-sidebar-section">
+        <div class="res-sidebar-label">Location</div>
+        <button class="res-cat-btn" onclick="filterResources('local',this)"><span class="res-cat-icon">📍</span> In Your Area <span class="res-cat-count" style="background:var(--terracotta);color:white;">5</span></button>
+        <button class="res-cat-btn" onclick="filterResources('national',this)"><span class="res-cat-icon">🌐</span> National <span class="res-cat-count">7</span></button>
+      </div>
+      <div class="res-area-banner">
+        <div class="res-area-label">📍 Your Location</div>
+        <div class="res-area-city">Los Angeles, CA</div>
+        <div class="res-area-sub">5 resources available exclusively in your city</div>
+        <button class="res-area-btn" onclick="filterResources('local', document.querySelector('.res-cat-btn[onclick*=local]'))">View LA Resources →</button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div>
+      <div class="res-main-header">
+        <div class="section-title">Resources</div>
+        <div class="res-search-wrap">
+          <span class="res-search-icon">🔍</span>
+          <input type="text" id="res-search" placeholder="Search grants, therapy, legal help..." oninput="filterResources(currentResFilter, document.querySelector('.res-cat-btn.active'))" />
+        </div>
+      </div>
+      <div id="res-results-count" class="res-results-count" style="margin-bottom:1rem;"></div>
+
+      <div class="resource-grid" id="resource-grid">
+
+        <div class="resource-card" data-cat="grants financial" data-scope="national" data-keywords="grants bipoc artist national money funding">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FFF3E0;">🏆</div><div><div class="resource-cat" style="color:var(--gold);">Grants</div><div class="resource-title">BIPOC Artist Grants 2025 — National Directory</div></div></div></div>
+          <div class="resource-desc">Curated list of national and local grants for BIPOC creators across all disciplines. Updated quarterly with deadlines and eligibility.</div>
+          <div class="res-card-footer"><a class="resource-link">View All Grants →</a><span class="res-city-tag">🌐 National</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="grants financial" data-scope="local" data-keywords="los angeles la city arts grants funding local california">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FFF3E0;">🏆</div><div><div class="resource-cat" style="color:var(--gold);">Grants</div><div class="resource-title">LA Department of Cultural Affairs — Artist Grant</div></div></div><span class="res-local-badge">📍 LA Only</span></div>
+          <div class="resource-desc">City of LA annual grant offering $5k–$25k to individual artists and small collectives based in Los Angeles. Application opens June 1.</div>
+          <div class="res-card-footer"><a class="resource-link">Apply Now →</a><span class="res-city-tag">📍 Los Angeles</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="grants financial" data-scope="local" data-keywords="california arts council grant funding state ca">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FFF3E0;">🎨</div><div><div class="resource-cat" style="color:var(--gold);">Grants</div><div class="resource-title">California Arts Council — Individual Artists</div></div></div><span class="res-local-badge">📍 CA Only</span></div>
+          <div class="resource-desc">State-funded program supporting California-based artists with project grants of up to $10,000. Priority given to underrepresented communities.</div>
+          <div class="res-card-footer"><a class="resource-link">Learn More →</a><span class="res-city-tag">📍 California</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="mental health" data-scope="national" data-keywords="therapy therapist black girls mental health counseling depression">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FCE4EC;">💜</div><div><div class="resource-cat" style="color:#C2185B;">Mental Health</div><div class="resource-title">Therapy for Black Girls — Directory</div></div></div></div>
+          <div class="resource-desc">Find licensed Black therapists who understand the creative journey. Filter by specialty, insurance, and telehealth availability.</div>
+          <div class="res-card-footer"><a class="resource-link">Find a Therapist →</a><span class="res-city-tag">🌐 National</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="mental health" data-scope="local" data-keywords="la los angeles free counseling mental health sliding scale artists">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FCE4EC;">🧠</div><div><div class="resource-cat" style="color:#C2185B;">Mental Health</div><div class="resource-title">Didi Hirsch Mental Health — LA Free Counseling</div></div></div><span class="res-local-badge">📍 LA Only</span></div>
+          <div class="resource-desc">Free and sliding-scale mental health services for LA residents. Includes creative burnout support and trauma-informed care in multiple languages.</div>
+          <div class="res-card-footer"><a class="resource-link">Get Support →</a><span class="res-city-tag">📍 Los Angeles</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="legal" data-scope="national" data-keywords="copyright protect art legal ip intellectual property basics">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#E8EAF6;">⚖️</div><div><div class="resource-cat" style="color:var(--indigo);">Legal & IP</div><div class="resource-title">Protect Your Art — Copyright Basics</div></div></div></div>
+          <div class="resource-desc">Plain-language guide to copyright, licensing, and protecting your creative work. Includes links to free legal clinics for artists.</div>
+          <div class="res-card-footer"><a class="resource-link">Read Guide →</a><span class="res-city-tag">🌐 National</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="legal" data-scope="local" data-keywords="la los angeles lawyers arts legal clinic free volunteer attorney contract">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#E8EAF6;">🏛️</div><div><div class="resource-cat" style="color:var(--indigo);">Legal & IP</div><div class="resource-title">Volunteer Lawyers for the Arts — LA Chapter</div></div></div><span class="res-local-badge">📍 LA Only</span></div>
+          <div class="resource-desc">Free legal consultations for LA-based artists on contracts, copyright disputes, business formation, and more. Monthly clinic every 2nd Thursday.</div>
+          <div class="res-card-footer"><a class="resource-link">Book a Session →</a><span class="res-city-tag">📍 Los Angeles</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="business" data-scope="national" data-keywords="business llc taxes pricing clients entrepreneur workshop free">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#E8F5E9;">🌱</div><div><div class="resource-cat" style="color:var(--sage);">Business</div><div class="resource-title">Turn Your Craft Into a Business</div></div></div></div>
+          <div class="resource-desc">Free workshop series: pricing your work, building a client base, setting up an LLC, and handling taxes as a creative entrepreneur.</div>
+          <div class="res-card-footer"><a class="resource-link">Register Free →</a><span class="res-city-tag">🌐 National</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="financial" data-scope="national" data-keywords="sba loan small business minority funding low interest">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#E3F2FD;">🎓</div><div><div class="resource-cat" style="color:var(--indigo);">Financial</div><div class="resource-title">SBA Minority Business Loan Programs</div></div></div></div>
+          <div class="resource-desc">Overview of Small Business Administration loan programs with low interest rates for minority-owned creative businesses. Includes step-by-step application guidance.</div>
+          <div class="res-card-footer"><a class="resource-link">Explore Programs →</a><span class="res-city-tag">🌐 National</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="financial business" data-scope="local" data-keywords="la los angeles EWDD workforce development small business loan local">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#E3F2FD;">💼</div><div><div class="resource-cat" style="color:var(--indigo);">Financial</div><div class="resource-title">LA EWDD — Small Business Microloan Program</div></div></div><span class="res-local-badge">📍 LA Only</span></div>
+          <div class="resource-desc">City of LA micro-loans up to $20k for creative small businesses. Low-interest, with free business coaching and no collateral required for qualifying artists.</div>
+          <div class="res-card-footer"><a class="resource-link">Apply →</a><span class="res-city-tag">📍 Los Angeles</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="business" data-scope="national" data-keywords="burnout creative mental wellness recovery productivity self-care artist">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FBE9E7;">🔥</div><div><div class="resource-cat" style="color:var(--terracotta);">Business</div><div class="resource-title">Creative Burnout — Recovery & Sustainability Guide</div></div></div></div>
+          <div class="resource-desc">Expert-developed guide for artists on recognizing and recovering from burnout, setting creative boundaries, and building a sustainable practice.</div>
+          <div class="res-card-footer"><a class="resource-link">Read Guide →</a><span class="res-city-tag">🌐 National</span></div>
+        </div>
+
+        <div class="resource-card" data-cat="grants" data-scope="local" data-keywords="la arts recovery fund los angeles emergency covid relief artist emergency">
+          <div class="res-card-top"><div class="res-card-icon-wrap"><div class="resource-icon" style="background:#FFF3E0;">🆘</div><div><div class="resource-cat" style="color:var(--gold);">Grants</div><div class="resource-title">LA Artist Emergency Relief Fund</div></div></div><span class="res-local-badge">📍 LA Only</span></div>
+          <div class="resource-desc">Emergency grant of up to $2,500 for LA-based artists facing financial hardship. Rolling applications accepted. Decisions within 10 business days.</div>
+          <div class="res-card-footer"><a class="resource-link">Apply for Relief →</a><span class="res-city-tag">📍 Los Angeles</span></div>
+        </div>
+
+      </div>
+
+      <div id="res-empty" style="display:none;text-align:center;padding:3rem 2rem;color:var(--muted);">
+        <div style="font-size:2rem;margin-bottom:0.6rem;">🔍</div>
+        <div style="font-size:0.95rem;font-weight:600;color:var(--charcoal);margin-bottom:0.35rem;">No resources found</div>
+        <div style="font-size:0.82rem;">Try a different search term or category.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="page" id="page-profile">
+  <div class="profile-hero cover-terra"></div>
+  <div class="profile-container">
+    <div class="profile-top"><div class="profile-avatar-lg">JA</div><div class="profile-actions"><button class="btn-primary">Edit Profile</button><button class="btn-outline">Share Profile</button></div></div>
+    <div class="profile-name">Jordan Amistad</div>
+    <div class="profile-discipline">Photographer & Visual Storyteller</div>
+    <div class="profile-location-line">📍 Los Angeles, CA · Available for Commissions</div>
+    <div class="profile-bio">Documentary and portrait photographer focused on the African diaspora and stories of community resilience. My work has been featured in galleries across LA, Atlanta, and New York.</div>
+    <div class="stat-row"><div class="stat-item"><div class="stat-num">128</div><div class="stat-label">Connections</div></div><div class="stat-item"><div class="stat-num">47</div><div class="stat-label">Works</div></div><div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Collabs</div></div><div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-label">Rating</div></div></div>
+    <div class="divider" style="margin-bottom:1.25rem;"></div>
+    <div class="sub-tabs"><button class="sub-tab active" onclick="switchSubTab(this)">Portfolio</button><button class="sub-tab" onclick="switchSubTab(this)">Shop</button><button class="sub-tab" onclick="switchSubTab(this)">Services</button></div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item cover-terra"><div class="portfolio-item-overlay">Portrait Series I</div></div>
+      <div class="portfolio-item cover-indigo"><div class="portfolio-item-overlay">Community Voices</div></div>
+      <div class="portfolio-item cover-gold"><div class="portfolio-item-overlay">Golden Hour</div></div>
+      <div class="portfolio-item cover-sage"><div class="portfolio-item-overlay">Nature & Identity</div></div>
+      <div class="portfolio-item cover-plum"><div class="portfolio-item-overlay">After Hours</div></div>
+      <div class="portfolio-item" style="background:linear-gradient(135deg,#3D8E8E,#6FC5C5)"><div class="portfolio-item-overlay">Ocean Stories</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const map = { discover:'Discover', timeline:'Community', events:'Events', marketplace:'Marketplace', collab:'Collaborate', network:'Network', resources:'Resources' };
+    document.querySelectorAll('.nav-btn').forEach(b => { if(b.textContent.trim() === map[id]) b.classList.add('active'); });
+    window.scrollTo(0, 0);
+  }
+
+  function filterTag(el) {
+    el.closest('.tag-row').querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function switchSubTab(el) {
+    el.closest('.sub-tabs').querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleConnect(e, btn) {
+    e.stopPropagation();
+    if(btn.classList.contains('connected')) { btn.classList.remove('connected'); btn.textContent = '+ Connect'; }
+    else { btn.classList.add('connected'); btn.textContent = '⏳ Requested'; }
+  }
+
+  function likePost(btn) {
+    const count = parseInt(btn.textContent.replace(/[^\d]/g,''));
+    if(btn.classList.contains('liked')) { btn.classList.remove('liked'); btn.textContent = '♡ ' + (count - 1); }
+    else { btn.classList.add('liked'); btn.textContent = '♥ ' + (count + 1); }
+  }
+
+  function toggleRsvp(btn) {
+    if(btn.classList.contains('rsvped')) { btn.classList.remove('rsvped'); btn.textContent = 'RSVP'; }
+    else { btn.classList.add('rsvped'); btn.textContent = '✓ Going'; }
+  }
+
+  // Set active nav on load
+  document.querySelector('.nav-btn').classList.add('active');
+
+  // COLLAB FILTER ENGINE
+  function filterCollab() {
+    const search = (document.getElementById('collab-search').value || '').toLowerCase().trim();
+    const city   = (document.getElementById('filter-city').value || '').toLowerCase();
+    const disc   = (document.getElementById('filter-discipline').value || '').toLowerCase();
+    const comp   = (document.getElementById('filter-comp').value || '').toLowerCase();
+    const sort   = document.getElementById('filter-sort').value;
+    const cards  = Array.from(document.querySelectorAll('#collab-grid .collab-card'));
+    let visible  = cards.filter(card => {
+      const cardCity = card.dataset.city || '';
+      const cardComp = card.dataset.comp || '';
+      const cardDisc = card.dataset.discipline || '';
+      const cardKeys = card.dataset.keywords || '';
+      const cardTitle = card.querySelector('.collab-title').textContent.toLowerCase();
+      const cardDesc  = card.querySelector('.collab-desc').textContent.toLowerCase();
+      if (city && !cardCity.includes(city)) return false;
+      if (comp && cardComp !== comp) return false;
+      if (disc && !cardDisc.includes(disc)) return false;
+      if (search) {
+        const hay = cardTitle + ' ' + cardDesc + ' ' + cardKeys + ' ' + cardDisc + ' ' + cardCity;
+        if (!hay.includes(search)) return false;
+      }
+      return true;
+    });
+    visible.sort((a, b) => {
+      if (sort === 'recent')   return parseInt(a.dataset.date)     - parseInt(b.dataset.date);
+      if (sort === 'popular')  return parseInt(b.dataset.popular)  - parseInt(a.dataset.popular);
+      if (sort === 'deadline') return parseInt(a.dataset.deadline) - parseInt(b.dataset.deadline);
+      return 0;
+    });
+    const grid = document.getElementById('collab-grid');
+    cards.forEach(c => c.style.display = 'none');
+    visible.forEach(c => { c.style.display = 'block'; grid.appendChild(c); });
+    const countEl = document.getElementById('collab-results-count');
+    countEl.textContent = visible.length === cards.length
+      ? 'Showing all ' + cards.length + ' opportunities'
+      : visible.length + ' of ' + cards.length + ' opportunities match your filters';
+    document.getElementById('collab-empty').style.display = visible.length === 0 ? 'block' : 'none';
+    grid.style.display = visible.length === 0 ? 'none' : 'grid';
+    renderFilterPills(city, disc, comp, search, sort);
+  }
+
+  function renderFilterPills(city, disc, comp, search, sort) {
+    const row = document.getElementById('active-filters');
+    row.innerHTML = '';
+    const cap = s => s.replace(/\b\w/g, l => l.toUpperCase());
+    const add = (label, fn) => {
+      const p = document.createElement('div');
+      p.className = 'active-filter-pill';
+      const btn = document.createElement('button');
+      btn.textContent = '×';
+      btn.setAttribute('onclick', fn);
+      p.innerHTML = label + ' ';
+      p.appendChild(btn);
+      row.appendChild(p);
+    };
+    if (city)   add('\u{1F4CD} ' + cap(city),   "clearFilter('filter-city')");
+    if (disc)   add('\u{1F3A8} ' + cap(disc),   "clearFilter('filter-discipline')");
+    if (comp)   add(cap(comp),                    "clearFilter('filter-comp')");
+    if (search) add('\u{1F50D} \u{201C}' + search + '\u{201D}', "clearSearch()");
+    if (sort && sort !== 'recent') add('Sort: ' + (sort === 'popular' ? 'Most Applied' : 'Deadline Soon'), "clearFilter('filter-sort')");
+    row.style.display = row.children.length > 0 ? 'flex' : 'none';
+  }
+
+  function clearFilter(id) { document.getElementById(id).value = id === 'filter-sort' ? 'recent' : ''; filterCollab(); }
+  function clearSearch()   { document.getElementById('collab-search').value = ''; filterCollab(); }
+  function clearCollabFilters() {
+    ['filter-city','filter-discipline','filter-comp'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('filter-sort').value = 'recent';
+    document.getElementById('collab-search').value = '';
+    filterCollab();
+  }
+  window.addEventListener('DOMContentLoaded', filterCollab);
+
+  // RESOURCES FILTER
+  let currentResFilter = 'all';
+  function filterResources(cat, btn) {
+    currentResFilter = cat;
+    if (btn) {
+      document.querySelectorAll('.res-cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    const search = (document.getElementById('res-search') ? document.getElementById('res-search').value : '').toLowerCase().trim();
+    const cards = Array.from(document.querySelectorAll('#resource-grid .resource-card'));
+    let visible = cards.filter(card => {
+      const cardCat   = (card.dataset.cat   || '').toLowerCase();
+      const cardScope = (card.dataset.scope  || '').toLowerCase();
+      const cardKeys  = (card.dataset.keywords || '').toLowerCase();
+      const cardText  = card.textContent.toLowerCase();
+      let catMatch = true;
+      if (cat === 'local')    catMatch = cardScope === 'local';
+      else if (cat === 'national') catMatch = cardScope === 'national';
+      else if (cat !== 'all') catMatch = cardCat.includes(cat);
+      const searchMatch = !search || cardKeys.includes(search) || cardText.includes(search);
+      return catMatch && searchMatch;
+    });
+    cards.forEach(c => c.style.display = 'none');
+    visible.forEach(c => c.style.display = 'block');
+    const countEl = document.getElementById('res-results-count');
+    if (countEl) countEl.textContent = visible.length === cards.length
+      ? 'Showing all ' + cards.length + ' resources'
+      : visible.length + ' of ' + cards.length + ' resources match';
+    const empty = document.getElementById('res-empty');
+    if (empty) empty.style.display = visible.length === 0 ? 'block' : 'none';
+  }
+  window.addEventListener('DOMContentLoaded', () => filterResources('all', null));
+</script>
+</body>
+</html>
