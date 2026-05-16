@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Apply to Collab — KIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --terra: #C4622D;
+      --terra-light: #E8825A;
+      --terra-pale: #F5DDD3;
+      --charcoal: #1E1A17;
+      --muted: #9A8478;
+      --sand: #D9CFC4;
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: white;
+      border-bottom: 1px solid rgba(30,26,23,0.08);
+      padding: 60px 20px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cancel-btn {
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--charcoal);
+    }
+
+    .submit-btn {
+      background: var(--terra);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .submit-btn:active {
+      opacity: 0.8;
+    }
+
+    /* CONTENT */
+    .content {
+      padding: 24px 20px;
+    }
+
+    /* COLLAB INFO */
+    .collab-info {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid rgba(30,26,23,0.08);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .collab-info-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .collab-info-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .collab-info-text {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* FORM */
+    .field-group {
+      margin-bottom: 20px;
+    }
+
+    .field-label {
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%;
+      background: white;
+      border: 1.5px solid rgba(30,26,23,0.12);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .field-input::placeholder {
+      color: var(--muted);
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: var(--terra);
+    }
+
+    .field-textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .field-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* RATE INPUTS */
+    .rate-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .rate-input {
+      flex: 1;
+    }
+
+    .rate-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    /* AVAILABILITY */
+    .availability-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .availability-chip {
+      padding: 8px 14px;
+      border: 1.5px solid rgba(30,26,23,0.12);
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--charcoal);
+      cursor: pointer;
+      background: white;
+    }
+
+    .availability-chip.active {
+      background: var(--terra);
+      border-color: var(--terra);
+      color: white;
+      font-weight: 600;
+    }
+
+    /* ATTACH FILE */
+    .attach-btn {
+      width: 100%;
+      background: rgba(30,26,23,0.04);
+      border: 1.5px dashed rgba(30,26,23,0.12);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .attach-btn:active {
+      opacity: 0.7;
+    }
+
+    .attach-icon {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+    }
+
+    .attach-text {
+      font-weight: 500;
+      font-size: 13px;
+      color: rgba(30,26,23,0.7);
+    }
+
+    .attach-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 20px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--terra);
+      color: var(--terra);
+    }
+
+    .nav-icon {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+    }
+
+    .spacer {
+      height: 80px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <a href="collab.html" class="cancel-btn">Cancel</a>
+    <div class="header-title">Apply to Collab</div>
+    <div class="submit-btn" onclick="handleSubmit()">Submit</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <!-- COLLAB INFO -->
+    <div class="collab-info">
+      <div class="collab-info-title">Album Cover & Merch Design</div>
+      <div class="collab-info-row">
+        <div class="collab-info-text">📍 Houston or Remote</div>
+        <div class="collab-info-text">💰 $1,500 flat</div>
+      </div>
+      <div class="collab-info-text">Houston-based rapper releasing debut LP. Need a graphic designer for full visual identity — cover, promo, merch.</div>
+    </div>
+
+    <!-- FORM -->
+    <form id="apply-form">
+      <div class="field-group">
+        <label class="field-label">Why are you interested?</label>
+        <textarea class="field-input field-textarea" placeholder="Share why this opportunity excites you and what you'd bring to the project..." required></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Relevant Experience</label>
+        <textarea class="field-input field-textarea" placeholder="Highlight any past work or projects that make you a great fit..." required></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Your Rate (Optional)</label>
+        <div class="rate-row">
+          <div class="rate-input">
+            <label class="rate-label">Min ($)</label>
+            <input type="number" class="field-input" placeholder="1000">
+          </div>
+          <div class="rate-input">
+            <label class="rate-label">Max ($)</label>
+            <input type="number" class="field-input" placeholder="2000">
+          </div>
+        </div>
+        <div class="field-note">Leave blank if you're comfortable with the posted budget</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Availability</label>
+        <div class="availability-grid">
+          <div class="availability-chip active">Immediately</div>
+          <div class="availability-chip">Within 2 weeks</div>
+          <div class="availability-chip">Within a month</div>
+          <div class="availability-chip">Custom dates</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Portfolio or Samples (Optional)</label>
+        <div class="attach-btn">
+          <div class="attach-icon">📎</div>
+          <div class="attach-text">Attach file or add link</div>
+          <div class="attach-sub">PDF, images, or portfolio URL</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Additional Notes (Optional)</label>
+        <textarea class="field-input field-textarea" placeholder="Anything else you'd like to share..."></textarea>
+      </div>
+    </form>
+
+    <div class="spacer"></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="discover.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <div>Discover</div>
+    </a>
+    <a href="community.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div>Community</div>
+    </a>
+    <a href="collab.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div>Collab</div>
+    </a>
+    <a href="messages.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>Messages</div>
+    </a>
+    <a href="profile.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>Profile</div>
+    </a>
+  </div><script>
+    // Availability chip toggle
+    document.querySelectorAll('.availability-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.availability-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+
+    function handleSubmit() {
+      const form = document.getElementById('apply-form');
+      if (form.checkValidity()) {
+        alert('Application submitted! You\'ll receive a confirmation message.');
+        window.location.href = 'collab.html';
+      } else {
+        form.reportValidity();
+      }
+    }
+  </script>
+
+</body>
+</html>

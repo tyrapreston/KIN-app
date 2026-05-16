@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Discover — KIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --terra: #C4622D;
+      --terra-light: #E8825A;
+      --terra-pale: #F5DDD3;
+      --charcoal: #1E1A17;
+      --muted: #9A8478;
+      --sand: #D9CFC4;
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+      --sage: #7A9E7E;
+      --indigo: #4A5899;
+      --gold: #C9933A;
+      --teal: #3D8E8E;
+      --plum: #6B4E71;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      background: var(--charcoal);
+      padding: 60px 20px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 28px;
+      color: var(--terra);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-dot {
+      color: var(--cream);
+    }
+
+    .top-icons {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .notification-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      background: rgba(245,240,232,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .profile-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      background: var(--terra);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--charcoal);
+      padding: 0 20px 24px;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--terra-light);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 26px;
+      color: var(--cream);
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+
+    .headline-accent {
+      color: var(--terra-light);
+    }
+
+    .search-bar {
+      background: var(--cream);
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      color: var(--charcoal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+    }
+
+    .search-bar input::placeholder {
+      color: rgba(30,26,23,0.4);
+    }
+
+    .clear-btn {
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: none;
+    }
+
+    .search-bar input:not(:placeholder-shown) ~ .clear-btn {
+      display: block;
+    }
+
+    /* CHIP ROWS */
+    .chip-row {
+      background: var(--warm-white);
+      padding: 12px 20px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .chip-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      padding: 7px 14px;
+      border-radius: 50px;
+      border: 1.5px solid rgba(30,26,23,0.12);
+      background: white;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--charcoal);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip.active {
+      background: var(--terra);
+      border-color: var(--terra);
+      color: white;
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background: var(--warm-white);
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--charcoal);
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(30,26,23,0.04);
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .toggle-btn {
+      width: 32px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .toggle-btn.active {
+      background: var(--cream);
+      color: var(--charcoal);
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 0 16px 20px;
+      background: var(--warm-white);
+    }
+
+    .grid-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(30,26,23,0.08);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .grid-card:active {
+      transform: scale(0.98);
+    }
+
+    .grid-banner {
+      height: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .grid-banner-circle {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 40px;
+      top: -20px;
+      right: -20px;
+    }
+
+    .grid-avatar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .grid-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 17px;
+      color: white;
+    }
+
+    .grid-info {
+      padding: 0 10px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .grid-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--charcoal);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .grid-disc {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--terra);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .grid-city {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .grid-footer {
+      padding: 0 10px 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .grid-connect-btn {
+      border: 1.5px solid var(--terra);
+      border-radius: 50px;
+      padding: 6px 14px;
+      width: 100%;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--terra);
+      cursor: pointer;
+    }
+
+    .grid-kin-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(196,98,45,0.08);
+      border: 1px solid rgba(196,98,45,0.2);
+      border-radius: 50px;
+      padding: 4px 10px;
+    }
+
+    .grid-kin-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--terra);
+    }
+
+    .grid-kin-text {
+      font-weight: 600;
+      font-size: 10px;
+      color: var(--terra);
+      letter-spacing: 1px;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 20px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: var(--terra);
+    }
+
+    .nav-item.active .nav-icon svg {
+      stroke: var(--terra);
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-icon svg {
+      stroke: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo">KIN<span class="logo-dot">.</span></div>
+    <div class="top-icons">
+      <div class="notification-btn">🔔</div>
+      <div class="profile-btn">TP</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">WELCOME TO KIN</div>
+    <div class="headline">
+      A home for <span class="headline-accent">BIPOC creators</span><br>to connect & thrive
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search creators, cities, disciplines..." id="search-input">
+      <div class="clear-btn" onclick="document.getElementById('search-input').value = ''">✕</div>
+    </div>
+  </div>
+
+  <!-- CITY CHIPS -->
+  <div class="chip-row">
+    <div class="chip active">All Cities</div>
+    <div class="chip">Los Angeles</div>
+    <div class="chip">Atlanta</div>
+    <div class="chip">New York</div>
+    <div class="chip">Chicago</div>
+    <div class="chip">Houston</div>
+    <div class="chip">Miami</div>
+    <div class="chip">Oakland</div>
+  </div>
+
+  <!-- DISCIPLINE CHIPS -->
+  <div class="chip-row" style="padding-top: 0;">
+    <div class="chip active">All</div>
+    <div class="chip">Photography</div>
+    <div class="chip">Design</div>
+    <div class="chip">Painting</div>
+    <div class="chip">Fashion</div>
+    <div class="chip">Sculpture</div>
+    <div class="chip">Film</div>
+    <div class="chip">Music</div>
+    <div class="chip">Murals</div>
+    <div class="chip">Writing</div>
+  </div>
+
+  <!-- SECTION HEADER -->
+  <div class="section-header">
+    <div class="section-title">Creators</div>
+    <div class="view-toggle">
+      <div class="toggle-btn active">⊞</div>
+      <div class="toggle-btn">☰</div>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+    <!-- Creator 1 -->
+    <div class="grid-card">
+      <div class="grid-banner" style="background: linear-gradient(135deg, #3d2210, #1a0d05);">
+        <div class="grid-banner-circle" style="background: rgba(196,98,45,0.2);"></div>
+      </div>
+      <div class="grid-avatar-wrap">
+        <div class="grid-avatar" style="background: #C4622D;">TP</div>
+      </div>
+      <div class="grid-info">
+        <div class="grid-name">Tyra Preston</div>
+        <div class="grid-disc">DESIGN · PHOTOGRAPHY</div>
+        <div class="grid-city">📍 Los Angeles</div>
+      </div>
+      <div class="grid-footer">
+        <div class="grid-kin-pill">
+          <div class="grid-kin-dot"></div>
+          <div class="grid-kin-text">KIN</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Creator 2 -->
+    <div class="grid-card">
+      <div class="grid-banner" style="background: linear-gradient(135deg, #1a2215, #0d1a0a);">
+        <div class="grid-banner-circle" style="background: rgba(74,88,153,0.2);"></div>
+      </div>
+      <div class="grid-avatar-wrap">
+        <div class="grid-avatar" style="background: #4A5899;">MJ</div>
+      </div>
+      <div class="grid-info">
+        <div class="grid-name">Marcus Johnson</div>
+        <div class="grid-disc">MUSIC · FILM</div>
+        <div class="grid-city">📍 Houston</div>
+      </div>
+      <div class="grid-footer">
+        <div class="grid-connect-btn">+ Connect</div>
+      </div>
+    </div>
+
+    <!-- Creator 3 -->
+    <div class="grid-card">
+      <div class="grid-banner" style="background: linear-gradient(135deg, #1a1530, #0a0515);">
+        <div class="grid-banner-circle" style="background: rgba(122,158,126,0.2);"></div>
+      </div>
+      <div class="grid-avatar-wrap">
+        <div class="grid-avatar" style="background: #7A9E7E;">ND</div>
+      </div>
+      <div class="grid-info">
+        <div class="grid-name">Nia Davis</div>
+        <div class="grid-disc">FILM</div>
+        <div class="grid-city">📍 Los Angeles</div>
+      </div>
+      <div class="grid-footer">
+        <div class="grid-connect-btn">+ Connect</div>
+      </div>
+    </div>
+
+    <!-- Creator 4 -->
+    <div class="grid-card">
+      <div class="grid-banner" style="background: linear-gradient(135deg, #2a1208, #160904);">
+        <div class="grid-banner-circle" style="background: rgba(201,147,58,0.2);"></div>
+      </div>
+      <div class="grid-avatar-wrap">
+        <div class="grid-avatar" style="background: #C9933A;">KT</div>
+      </div>
+      <div class="grid-info">
+        <div class="grid-name">Kofi Twumasi</div>
+        <div class="grid-disc">PHOTOGRAPHY</div>
+        <div class="grid-city">📍 Atlanta</div>
+      </div>
+      <div class="grid-footer">
+        <div class="grid-connect-btn">+ Connect</div>
+      </div>
+    </div>
+
+    <!-- Creator 5 -->
+    <div class="grid-card">
+      <div class="grid-banner" style="background: linear-gradient(135deg, #0d1a2a, #060d15);">
+        <div class="grid-banner-circle" style="background: rgba(61,142,142,0.2);"></div>
+      </div>
+      <div class="grid-avatar-wrap">
+        <div class="grid-avatar" style="background: #3D8E8E;">LV</div>
+      </div>
+      <div class="grid-info">
+        <div class="grid-name">Luz Vargas</div>
+        <div class="grid-disc">FASHION DESIGN</div>
+        <div class="grid-city">📍 Miami</div>
+      </div>
+      <div class="grid-footer">
+        <div class="grid-connect-btn">+ Connect</div>
+      </div>
+    </div>
+
+    <!-- Creator 6 -->
+    <div class="grid-card">
+      <div class="grid-banner" style="background: linear-gradient(135deg, #2a2010, #151008);">
+        <div class="grid-banner-circle" style="background: rgba(107,78,113,0.2);"></div>
+      </div>
+      <div class="grid-avatar-wrap">
+        <div class="grid-avatar" style="background: #6B4E71;">DN</div>
+      </div>
+      <div class="grid-info">
+        <div class="grid-name">Deja Nwosu</div>
+        <div class="grid-disc">SCULPTURE</div>
+        <div class="grid-city">📍 Chicago</div>
+      </div>
+      <div class="grid-footer">
+        <div class="grid-connect-btn">+ Connect</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="discover.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <div>Discover</div>
+    </a>
+    <a href="community.html" class="nav-item">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div>Community</div>
+    </a>
+    <a href="collab.html" class="nav-item">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div>Collab</div>
+    </a>
+    <a href="messages.html" class="nav-item">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>Messages</div>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>Profile</div>
+    </a>
+  </div>
+
+  <script>
+    // Add chip toggle functionality
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const row = chip.parentElement;
+        row.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+
+    // View toggle
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

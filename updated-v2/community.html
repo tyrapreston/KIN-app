@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Community — KIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --terra: #C4622D;
+      --terra-light: #E8825A;
+      --terra-pale: #F5DDD3;
+      --charcoal: #1E1A17;
+      --muted: #9A8478;
+      --sand: #D9CFC4;
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+      --sage: #7A9E7E;
+      --indigo: #4A5899;
+      --gold: #C9933A;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      background: var(--charcoal);
+      padding: 60px 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 28px;
+      color: var(--terra);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-dot {
+      color: var(--cream);
+    }
+
+    /* MAIN TABS */
+    .main-tab-row {
+      background: var(--charcoal);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(245,240,232,0.08);
+    }
+
+    .main-tab {
+      padding: 12px 2px;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .main-tab.active {
+      border-bottom-color: var(--terra-light);
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    /* SUB TABS */
+    .sub-tab-row {
+      background: white;
+      border-bottom: 1px solid rgba(30,26,23,0.08);
+      padding: 0 20px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .sub-tab-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .feed-tab {
+      padding: 12px 14px;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .feed-tab.active {
+      border-bottom-color: var(--terra);
+      color: var(--charcoal);
+      font-weight: 600;
+    }
+
+    /* COMPOSE STRIP */
+    .compose-strip {
+      background: white;
+      border-bottom: 1px solid rgba(30,26,23,0.08);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .compose-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+      background: var(--terra);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+      color: white;
+    }
+
+    .compose-fake {
+      flex: 1;
+      background: rgba(30,26,23,0.04);
+      border-radius: 50px;
+      padding: 9px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* POST CARD */
+    .post-card {
+      background: white;
+      border-bottom: 8px solid var(--warm-white);
+    }
+
+    .post-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 14px 10px;
+    }
+
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+      color: white;
+    }
+
+    .post-meta {
+      flex: 1;
+    }
+
+    .post-author {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .post-role {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .post-time {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .post-body {
+      padding: 0 14px 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(30,26,23,0.8);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 14px 10px;
+    }
+
+    .post-tag {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--terra);
+    }
+
+    .post-actions {
+      display: flex;
+      border-top: 1px solid rgba(30,26,23,0.08);
+    }
+
+    .post-action {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    /* FLOATING BTN */
+    .floating-btn {
+      position: fixed;
+      bottom: 104px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 26px;
+      background: var(--terra);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 50;
+    }
+
+    /* EVENTS */
+    .featured-event {
+      margin: 16px;
+      border-radius: 18px;
+      background: var(--charcoal);
+      min-height: 180px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-bg {
+      position: absolute;
+      font-size: 80px;
+      opacity: 0.12;
+      top: 20px;
+      right: 20px;
+    }
+
+    .featured-badge {
+      background: var(--terra);
+      padding: 4px 10px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .featured-badge-text {
+      font-size: 9px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 1.2px;
+    }
+
+    .featured-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+      color: white;
+      margin-bottom: 8px;
+      line-height: 1.25;
+      position: relative;
+      z-index: 1;
+    }
+
+    .featured-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .featured-meta-text {
+      font-size: 11px;
+      color: var(--sand);
+    }
+
+    .featured-actions {
+      display: flex;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-white {
+      background: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--charcoal);
+      cursor: pointer;
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .chip-row {
+      padding: 10px 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .chip-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      padding: 7px 14px;
+      border-radius: 50px;
+      border: 1.5px solid rgba(30,26,23,0.12);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--charcoal);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--terra);
+      border-color: var(--terra);
+      color: white;
+    }
+
+    .event-list {
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .event-item {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .date-block {
+      width: 58px;
+      background: rgba(30,26,23,0.04);
+      border-right: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .date-month {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--terra);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .date-day {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 26px;
+      color: var(--charcoal);
+      line-height: 1.15;
+    }
+
+    .date-dow {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .event-info {
+      flex: 1;
+      padding: 10px;
+    }
+
+    .event-type-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 50px;
+      margin-bottom: 4px;
+    }
+
+    .event-type-text {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .event-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--charcoal);
+      margin-bottom: 3px;
+      line-height: 1.4;
+    }
+
+    .event-details {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .event-rsvp {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 10px;
+      gap: 4px;
+    }
+
+    .rsvp-btn {
+      background: var(--terra);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-weight: 600;
+      font-size: 11px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .event-price {
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--charcoal);
+    }
+
+    .event-price-free {
+      color: var(--sage);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 20px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--terra);
+      color: var(--terra);
+    }
+
+    .nav-icon {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+    }
+
+    /* Tab content containers */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .milestone {
+      margin: 0 14px 12px;
+      background: var(--charcoal);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .milestone-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--terra-light);
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .milestone-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: white;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .milestone-body {
+      font-size: 13px;
+      color: var(--sand);
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo">KIN<span class="logo-dot">.</span></div>
+  </div>
+
+  <!-- MAIN TABS -->
+  <div class="main-tab-row">
+    <div class="main-tab active" onclick="switchMainTab('feed')">Feed</div>
+    <div class="main-tab" onclick="switchMainTab('events')">Events</div>
+    <div class="main-tab" onclick="switchMainTab('marketplace')">Marketplace</div>
+    <div class="main-tab" onclick="switchMainTab('resources')">Resources</div>
+  </div>
+
+  <!-- FEED TAB -->
+  <div id="feed-content" class="tab-content active">
+    <!-- SUB TABS -->
+    <div class="sub-tab-row">
+      <div class="feed-tab active">For You</div>
+      <div class="feed-tab">Network</div>
+      <div class="feed-tab">City</div>
+      <div class="feed-tab">Trending</div>
+    </div>
+
+    <!-- COMPOSE STRIP -->
+    <div class="compose-strip">
+      <div class="compose-avatar">TP</div>
+      <div class="compose-fake">Share your work or a win...</div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="post-card">
+      <div class="post-head">
+        <div class="post-avatar" style="background: #C4622D;">TR</div>
+        <div class="post-meta">
+          <div class="post-author">Tyra Preston</div>
+          <div class="post-role">Design · Los Angeles</div>
+        </div>
+        <div class="post-time">2h ago</div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-label">🏆 MILESTONE</div>
+        <div class="milestone-title">KIN app prototype is live!</div>
+        <div class="milestone-body">After months of building, the first working prototype of KIN is ready. This is just the beginning — a platform for us, by us.</div>
+      </div>
+      <div class="tag-row">
+        <div class="post-tag">#BIPOC</div>
+        <div class="post-tag">#TechForGood</div>
+        <div class="post-tag">#BlackCreators</div>
+      </div>
+      <div class="post-actions">
+        <div class="post-action">♡ 47</div>
+        <div class="post-action">💬 12</div>
+        <div class="post-action">⟳ Repost</div>
+        <div class="post-action">↗ Share</div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-head">
+        <div class="post-avatar" style="background: #4A5899;">MJ</div>
+        <div class="post-meta">
+          <div class="post-author">Marcus Johnson</div>
+          <div class="post-role">Music · Houston</div>
+        </div>
+        <div class="post-time">5h ago</div>
+      </div>
+      <div class="post-body">
+        Studio session turned into magic. New single drops next week. Shoutout to my producer and everyone who believed in this vision. 🎵
+      </div>
+      <div class="tag-row">
+        <div class="post-tag">#NewMusic</div>
+        <div class="post-tag">#IndieArtist</div>
+      </div>
+      <div class="post-actions">
+        <div class="post-action">♡ 83</div>
+        <div class="post-action">💬 24</div>
+        <div class="post-action">⟳ Repost</div>
+        <div class="post-action">↗ Share</div>
+      </div>
+    </div>
+
+    <!-- FLOATING BTN -->
+    <div class="floating-btn">+</div>
+  </div>
+
+  <!-- EVENTS TAB -->
+  <div id="events-content" class="tab-content">
+    <!-- FEATURED EVENT -->
+    <div class="featured-event">
+      <div class="featured-bg">🎨</div>
+      <div class="featured-badge">
+        <div class="featured-badge-text">✦ FEATURED</div>
+      </div>
+      <div class="featured-title">Black Creators Showcase: Summer Edition</div>
+      <div class="featured-meta">
+        <div class="featured-meta-text">📅 July 15 · 7:00 PM</div>
+        <div class="featured-meta-text">📍 The Broad, Los Angeles</div>
+        <div class="featured-meta-text">🎟 Free with RSVP</div>
+      </div>
+      <div class="featured-actions">
+        <div class="btn-white">RSVP Now</div>
+        <div class="btn-ghost">Details</div>
+      </div>
+    </div>
+
+    <!-- CATEGORY CHIPS -->
+    <div class="chip-row">
+      <div class="chip active">All Events</div>
+      <div class="chip">Showcase</div>
+      <div class="chip">Workshop</div>
+      <div class="chip">Networking</div>
+      <div class="chip">Exhibition</div>
+      <div class="chip">Performance</div>
+    </div>
+
+    <!-- EVENT LIST -->
+    <div class="event-list">
+      <div class="event-item">
+        <div class="date-block">
+          <div class="date-month">JUN</div>
+          <div class="date-day">28</div>
+          <div class="date-dow">SAT</div>
+        </div>
+        <div class="event-info">
+          <div class="event-type-badge" style="background: #E8F5E9;">
+            <div class="event-type-text" style="color: #2E7D32;">WORKSHOP</div>
+          </div>
+          <div class="event-title">Building Your Creative Portfolio</div>
+          <div class="event-details">📍 Arts District, LA · 2:00 PM</div>
+        </div>
+        <div class="event-rsvp">
+          <div class="rsvp-btn">RSVP</div>
+          <div class="event-price event-price-free">Free</div>
+        </div>
+      </div>
+
+      <div class="event-item">
+        <div class="date-block">
+          <div class="date-month">JUL</div>
+          <div class="date-day">05</div>
+          <div class="date-dow">FRI</div>
+        </div>
+        <div class="event-info">
+          <div class="event-type-badge" style="background: #FFF3E0;">
+            <div class="event-type-text" style="color: #E65100;">SHOWCASE</div>
+          </div>
+          <div class="event-title">Open Mic Night: Voices Rising</div>
+          <div class="event-details">📍 The Blue Room · 8:00 PM</div>
+        </div>
+        <div class="event-rsvp">
+          <div class="rsvp-btn">RSVP</div>
+          <div class="event-price event-price-free">Free</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKETPLACE TAB -->
+  <div id="marketplace-content" class="tab-content">
+    <div style="padding: 40px 20px; text-align: center;">
+      <div style="font-size: 48px; margin-bottom: 16px;">🛍️</div>
+      <div style="font-family: 'Fraunces', serif; font-weight: 700; font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit; margin-bottom: 8px;">Marketplace Coming Soon</div>
+      <div style="font-size: 13px; color: var(--muted); line-height: 1.5;">Buy and sell creative work directly from BIPOC creators.</div>
+    </div>
+  </div>
+
+  <!-- RESOURCES TAB -->
+  <div id="resources-content" class="tab-content">
+    <div style="padding: 40px 20px; text-align: center;">
+      <div style="font-size: 48px; margin-bottom: 16px;">📚</div>
+      <div style="font-family: 'Fraunces', serif; font-weight: 700; font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit; margin-bottom: 8px;">Resources Coming Soon</div>
+      <div style="font-size: 13px; color: var(--muted); line-height: 1.5;">Grants, mental health support, legal resources, and more.</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="discover.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <div>Discover</div>
+    </a>
+    <a href="community.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div>Community</div>
+    </a>
+    <a href="collab.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div>Collab</div>
+    </a>
+    <a href="messages.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>Messages</div>
+    </a>
+    <a href="profile.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>Profile</div>
+    </a>
+  </div><script>
+    function switchMainTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.main-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Update content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(tabName + '-content').classList.add('active');
+    }
+
+    // Sub tab switching
+    document.querySelectorAll('.feed-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    // Chip switching
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const row = chip.parentElement;
+        row.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

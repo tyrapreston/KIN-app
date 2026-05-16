@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Messages — KIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --terra: #C4622D;
+      --terra-light: #E8825A;
+      --terra-pale: #F5DDD3;
+      --charcoal: #1E1A17;
+      --muted: #9A8478;
+      --sand: #D9CFC4;
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+      --sage: #7A9E7E;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--charcoal);
+      padding: 60px 20px 16px;
+    }
+
+    .header-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--cream);
+    }
+
+    /* INQUIRIES SECTION */
+    .inquiries-section {
+      background: white;
+      padding-top: 14px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(30,26,23,0.08);
+    }
+
+    .inquiries-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      margin-bottom: 10px;
+    }
+
+    .inquiries-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inquiries-section-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--charcoal);
+    }
+
+    .new-badge {
+      background: var(--terra);
+      border-radius: 50px;
+      padding: 2px 8px;
+      font-weight: 600;
+      font-size: 10px;
+      color: white;
+    }
+
+    .see-all-text {
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--terra);
+      cursor: pointer;
+    }
+
+    .example-banner {
+      margin: 0 20px 10px;
+      background: var(--terra-pale);
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #FFE0B2;
+    }
+
+    .example-banner-text {
+      font-size: 11px;
+      color: var(--terra);
+      line-height: 1.45;
+    }
+
+    .inquiry-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      gap: 12px;
+      border-top: 1px solid rgba(30,26,23,0.08);
+      cursor: pointer;
+    }
+
+    .inquiry-row:active {
+      background: rgba(30,26,23,0.02);
+    }
+
+    .inquiry-row.new {
+      background: rgba(196,98,45,0.03);
+      border-left: 3px solid var(--terra);
+      padding-left: 17px;
+    }
+
+    .inquiry-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .inquiry-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .inquiry-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .inquiry-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--charcoal);
+      flex: 1;
+      margin-right: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-pill {
+      border-radius: 50px;
+      padding: 2px 7px;
+      flex-shrink: 0;
+    }
+
+    .status-pill-text {
+      font-weight: 600;
+      font-size: 10px;
+    }
+
+    .status-pill.new {
+      background: #E8F5E9;
+    }
+
+    .status-pill.new .status-pill-text {
+      color: #2E7D32;
+    }
+
+    .status-pill.read {
+      background: var(--cream);
+    }
+
+    .status-pill.read .status-pill-text {
+      color: var(--muted);
+    }
+
+    .inquiry-preview {
+      font-size: 12px;
+      color: rgba(30,26,23,0.7);
+      margin-bottom: 5px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .inquiry-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .budget-pill {
+      background: var(--terra-pale);
+      border-radius: 50px;
+      padding: 2px 8px;
+      font-weight: 500;
+      font-size: 10px;
+      color: var(--terra);
+    }
+
+    .inquiry-time {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* SECTION DIVIDER */
+    .section-divider {
+      padding: 10px 20px;
+      background: var(--warm-white);
+    }
+
+    .section-divider-text {
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* CONVERSATIONS */
+    .conv-item {
+      background: white;
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(30,26,23,0.08);
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .conv-item:active {
+      background: rgba(30,26,23,0.02);
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .conv-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .conv-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .conv-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--charcoal);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .conv-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    .conv-discipline {
+      font-weight: 500;
+      font-size: 11px;
+      color: var(--terra);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .conv-last-msg {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .conv-arrow {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* EMPTY STATE */
+    .empty-wrap {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .empty-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .discover-btn {
+      background: var(--terra);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: white;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 20px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--terra);
+      color: var(--terra);
+    }
+
+    .nav-icon {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-title">Messages</div>
+  </div>
+
+  <!-- INQUIRIES SECTION -->
+  <div class="inquiries-section">
+    <div class="inquiries-header">
+      <div class="inquiries-header-left">
+        <div class="inquiries-section-title">Collaboration requests</div>
+        <div class="new-badge">2 new</div>
+      </div>
+      <div class="see-all-text">See all →</div>
+    </div>
+
+    <div class="example-banner">
+      <div class="example-banner-text">
+        ✦ This is how collaboration requests will appear when creators reach out
+      </div>
+    </div>
+
+    <!-- INQUIRY 1 -->
+    <div class="inquiry-row new">
+      <div class="inquiry-avatar" style="background: #C4622D;">MJ</div>
+      <div class="inquiry-info">
+        <div class="inquiry-top">
+          <div class="inquiry-name">Marcus Johnson</div>
+          <div class="status-pill new">
+            <div class="status-pill-text">New</div>
+          </div>
+        </div>
+        <div class="inquiry-preview">Debut album visual identity — 3 music videos</div>
+        <div class="inquiry-meta">
+          <div class="budget-pill">$2,000–$5,000</div>
+          <div class="inquiry-time">2h</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INQUIRY 2 -->
+    <div class="inquiry-row new">
+      <div class="inquiry-avatar" style="background: #4A5899;">ND</div>
+      <div class="inquiry-info">
+        <div class="inquiry-top">
+          <div class="inquiry-name">Nia Davis</div>
+          <div class="status-pill new">
+            <div class="status-pill-text">New</div>
+          </div>
+        </div>
+        <div class="inquiry-preview">Short film about Black motherhood in South LA</div>
+        <div class="inquiry-meta">
+          <div class="budget-pill">$500–$2,000</div>
+          <div class="inquiry-time">1d</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INQUIRY 3 -->
+    <div class="inquiry-row">
+      <div class="inquiry-avatar" style="background: #7A9E7E;">KT</div>
+      <div class="inquiry-info">
+        <div class="inquiry-top">
+          <div class="inquiry-name">Kofi Twumasi</div>
+          <div class="status-pill read">
+            <div class="status-pill-text">Read</div>
+          </div>
+        </div>
+        <div class="inquiry-preview">Brand photography for streetwear drop in Miami</div>
+        <div class="inquiry-meta">
+          <div class="budget-pill">$500–$2,000</div>
+          <div class="inquiry-time">3d</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="section-divider">
+    <div class="section-divider-text">Conversations</div>
+  </div>
+
+  <!-- CONVERSATIONS -->
+  <div class="conv-item">
+    <div class="avatar" style="background: #C9933A;">LV</div>
+    <div class="conv-info">
+      <div class="conv-top">
+        <div class="conv-name">Luz Vargas</div>
+        <div class="conv-time">5m</div>
+      </div>
+      <div class="conv-discipline">Fashion Design · Miami</div>
+      <div class="conv-last-msg">That sounds perfect! When can we meet?</div>
+    </div>
+    <div class="conv-arrow">›</div>
+  </div>
+
+  <div class="conv-item">
+    <div class="avatar" style="background: #3D8E8E;">DN</div>
+    <div class="conv-info">
+      <div class="conv-top">
+        <div class="conv-name">Deja Nwosu</div>
+        <div class="conv-time">2h</div>
+      </div>
+      <div class="conv-discipline">Sculpture · Chicago</div>
+      <div class="conv-last-msg">I'd love to collaborate on this!</div>
+    </div>
+    <div class="conv-arrow">›</div>
+  </div>
+
+  <div class="conv-item">
+    <div class="avatar" style="background: #6B4E71;">AO</div>
+    <div class="conv-info">
+      <div class="conv-top">
+        <div class="conv-name">Amara Osei</div>
+        <div class="conv-time">1d</div>
+      </div>
+      <div class="conv-discipline">Film Editing · Oakland</div>
+      <div class="conv-last-msg">Just sent over the proposal</div>
+    </div>
+    <div class="conv-arrow">›</div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="discover.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <div>Discover</div>
+    </a>
+    <a href="community.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div>Community</div>
+    </a>
+    <a href="collab.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div>Collab</div>
+    </a>
+    <a href="messages.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>Messages</div>
+    </a>
+    <a href="profile.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>Profile</div>
+    </a>
+  </div></body>
+</html>

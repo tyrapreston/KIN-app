@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profile — KIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --terra: #C4622D;
+      --terra-light: #E8825A;
+      --terra-pale: #F5DDD3;
+      --charcoal: #1E1A17;
+      --muted: #9A8478;
+      --sand: #D9CFC4;
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* BACKGROUND GRADIENT */
+    .bg-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, var(--terra) 0%, var(--terra-light) 50%, var(--terra-pale) 100%);
+      z-index: 0;
+    }
+
+    .top-glow {
+      position: fixed;
+      top: -60px;
+      left: 10%;
+      width: 80%;
+      height: 300px;
+      border-radius: 200px;
+      background: rgba(196,98,45,0.22);
+      opacity: 0.7;
+      filter: blur(60px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* TOP NAV */
+    .top-nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 60px 24px 12px;
+    }
+
+    .nav-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+      background: rgba(245,240,232,0.08);
+      border: 1px solid rgba(245,240,232,0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+      font-size: 16px;
+      opacity: 0.85;
+      cursor: pointer;
+    }
+
+    .wordmark {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--terra-light);
+      letter-spacing: 4px;
+    }
+
+    /* CONTENT */
+    .content {
+      position: relative;
+      z-index: 2;
+      background: var(--warm-white);
+      border-radius: 0;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 8px 24px 28px;
+    }
+
+    .avatar-ring {
+      width: 92px;
+      height: 92px;
+      border-radius: 46px;
+      background: linear-gradient(135deg, var(--terra), var(--terra-light), #f0a070, var(--terra));
+      padding: 2px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-inner {
+      width: 84px;
+      height: 84px;
+      border-radius: 42px;
+      background: #e8c4a8;
+      border: 2px solid rgba(30,26,23,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 30px;
+      color: var(--terra-light);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196,98,45,0.14);
+      border: 1px solid rgba(139,58,24,0.35);
+      border-radius: 20px;
+      padding: 5px 14px;
+      margin-bottom: 16px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: #6dbf7e;
+    }
+
+    .status-pill-text {
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      color: #8B3A18;
+    }
+
+    .profile-name {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 36px;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      color: var(--charcoal);
+      margin-bottom: 6px;
+    }
+
+    .profile-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 10px;
+    }
+
+    .profile-bio {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(30,26,23,0.7);
+      max-width: 270px;
+      margin: 0 auto 6px;
+    }
+
+    .bio-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .bio-link {
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--terra-light);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .bio-link-pipe {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .location-tag {
+      margin-top: 10px;
+      font-size: 11px;
+      letter-spacing: 0.4px;
+      color: #6b5a50;
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: rgba(196,98,45,0.2);
+      margin: 4px 24px 24px;
+    }
+
+    /* STATS */
+    .stats-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 24px;
+      margin-bottom: 28px;
+    }
+
+    .stat-block {
+      flex: 1;
+      background: rgba(30,26,23,0.05);
+      border: 1px solid rgba(30,26,23,0.08);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 1;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #6b5a50;
+    }
+
+    /* SECTION LABEL */
+    .section-label-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 24px;
+      margin-bottom: 14px;
+    }
+
+    .section-label-text {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6b5a50;
+    }
+
+    .section-label-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(30,26,23,0.08);
+    }
+
+    .add-work-btn {
+      background: rgba(196,98,45,0.15);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--terra-light);
+      cursor: pointer;
+    }
+
+    /* PORTFOLIO GRID */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 20px;
+      margin-bottom: 28px;
+    }
+
+    .portfolio-card {
+      position: relative;
+      aspect-ratio: 1 / 1.35;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(196,98,45,0.15);
+    }
+
+    .portfolio-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .portfolio-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(10,5,0,0.92), transparent);
+      padding: 12px 12px 12px;
+      padding-top: 28px;
+    }
+
+    .portfolio-title {
+      font-weight: 500;
+      font-size: 11px;
+      color: rgba(245,240,232,0.9);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .portfolio-likes {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* CONNECT SECTION */
+    .connect-section {
+      margin: 0 24px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(196,98,45,0.25);
+      background: linear-gradient(135deg, rgba(196,98,45,0.18), rgba(232,130,90,0.08));
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 60px;
+    }
+
+    .connect-left {
+      flex: 1;
+    }
+
+    .connect-text {
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--charcoal);
+      margin-bottom: 3px;
+    }
+
+    .connect-sub {
+      font-size: 11px;
+      color: #6b5a50;
+    }
+
+    .connect-btn {
+      background: var(--terra);
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.3px;
+      color: white;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid rgba(30,26,23,0.08);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 20px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--terra);
+      color: var(--terra);
+    }
+
+    .nav-icon-bottom {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BACKGROUND -->
+  <div class="bg-gradient"></div>
+  <div class="top-glow"></div>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <a href="discover.html" class="nav-icon">←</a>
+    <div class="wordmark">KIN</div>
+    <div class="nav-icon">⋯</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <!-- HERO -->
+    <div class="hero">
+      <div class="avatar-ring">
+        <div class="avatar-inner">TP</div>
+      </div>
+
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <div class="status-pill-text">OPEN TO COLLABS</div>
+      </div>
+
+      <div class="profile-name">Tyra Preston</div>
+      <div class="profile-title">DESIGN · PHOTOGRAPHY</div>
+      <div class="profile-bio">
+        Building KIN, a platform for BIPOC creators to connect, collaborate, and thrive.
+      </div>
+
+      <div class="bio-links">
+        <a class="bio-link">Portfolio</a>
+        <span class="bio-link-pipe">|</span>
+        <a class="bio-link">Instagram</a>
+      </div>
+
+      <div class="location-tag">📍 Los Angeles</div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="stat-number">47</div>
+        <div class="stat-label">KIN ›</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">12</div>
+        <div class="stat-label">WORKS</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">3</div>
+        <div class="stat-label">COLLABS</div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO -->
+    <div class="section-label-row">
+      <div class="section-label-text">Portfolio</div>
+      <div class="section-label-line"></div>
+      <div class="add-work-btn">+ Add</div>
+    </div>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-card">
+        <div class="portfolio-bg" style="background: linear-gradient(135deg, #3d2210, #1a0d05);">
+          🌅
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-title">Untitled I</div>
+          <div class="portfolio-likes">♥ 47</div>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-bg" style="background: linear-gradient(135deg, #1a2215, #0d1a0a);">
+          🌿
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-title">Roots</div>
+          <div class="portfolio-likes">♥ 83</div>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-bg" style="background: linear-gradient(135deg, #1a1530, #0a0515);">
+          🌙
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-title">Night Study</div>
+          <div class="portfolio-likes">♥ 61</div>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-bg" style="background: linear-gradient(135deg, #2a1208, #160904);">
+          🔥
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-title">After Hours</div>
+          <div class="portfolio-likes">♥ 29</div>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-bg" style="background: linear-gradient(135deg, #0d1a2a, #060d15);">
+          🌊
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-title">Ocean Study</div>
+          <div class="portfolio-likes">♥ 54</div>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-bg" style="background: linear-gradient(135deg, #2a2010, #151008);">
+          ✨
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-title">Golden Hour</div>
+          <div class="portfolio-likes">♥ 71</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHARE CTA -->
+    <div class="connect-section">
+      <div class="connect-left">
+        <div class="connect-text">Share your profile</div>
+        <div class="connect-sub">Let your Kin find you</div>
+      </div>
+      <div class="connect-btn">Share</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="discover.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <div>Discover</div>
+    </a>
+    <a href="community.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div>Community</div>
+    </a>
+    <a href="collab.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div>Collab</div>
+    </a>
+    <a href="messages.html" class="nav-item ">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>Messages</div>
+    </a>
+    <a href="profile.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div>Profile</div>
+    </a>
+  </div></body>
+</html>
